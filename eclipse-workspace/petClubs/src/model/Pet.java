@@ -5,13 +5,18 @@
 * DEPARTAMENTO TIC - ALGORTIMOS Y PROGRAMACIÓN II
 * LAB II
 * @AUTHOR: GONZALO DE VARONA <gonzalo.de1@correo.icesi.edu.co>
-* @LAST UPDATE DATE: 17 AUGUST 2019
+* @LAST UPDATE DATE: 24 AUGUST 2019
 * ˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜
 */
 
 package model;
 
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.GregorianCalendar;
 
@@ -28,24 +33,25 @@ public class Pet implements Serializable {
 	public final static String FERRET = "Ferret";
 	public final static char MALE = 'M';
 	public final static char FEMALE = 'F';
+	public final static String PETSCSV = "data/Pets.csv";
 	
 	
 	//ATTRIBUTES
 	private String id;
 	private String name;
-	private String lastName;
 	private GregorianCalendar birthDate;
 	private char gender;
 	private String type;
+	
+	//RELATIONSHIPS
 	private Person owner;
 	
 	
 	
-	public Pet(String id, String name, String lastName, GregorianCalendar birthDate, char gender, String type, Person owner) {
+	public Pet(String id, String name, GregorianCalendar birthDate, char gender, String type, Person owner) {
 		super();
 		this.id = id;
 		this.name = name;
-		this.lastName = lastName;
 		this.birthDate = birthDate;
 		this.gender = gender;
 		this.type = type;
@@ -63,12 +69,6 @@ public class Pet implements Serializable {
 	}
 	public void setName(String name) {
 		this.name = name;
-	}
-	public String getLastName() {
-		return lastName;
-	}
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
 	}
 	public GregorianCalendar getBirthDate() {
 		return birthDate;
@@ -94,6 +94,8 @@ public class Pet implements Serializable {
 	public void setOwner(Person owner) {
 		this.owner = owner;
 	}
+	
+	
 	
 	
 	
