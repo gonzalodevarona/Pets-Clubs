@@ -84,7 +84,7 @@ public class Club implements Comparable<Club> {
 			
 				Pet pet = pets.get(0);
 				Person person = clients.get(i);
-				if (!(person.isThereADoppelganger(pet.getName()))) {
+				if (!(person.isThereADoppelganger(pet.getName(), pet.getId()))) {
 					person.addPet(pet);
 					pet.setOwner(person);
 					
@@ -125,8 +125,26 @@ public class Club implements Comparable<Club> {
 		return x;
 	} 
 	
+	public void saveChangesPets() throws FileNotFoundException, IOException {
+		for (int i = 0; i < clients.size(); i++) {
+			clients.get(i).saveChanges();
+			
+		}
+			
+		
+	}
+	
+	public void loadChangesPets() throws FileNotFoundException, IOException, ClassNotFoundException {
+		for (int i = 0; i < clients.size(); i++) {
+			clients.get(i).loadChanges();
+			
+		}
+		
+	}
+	
+	
 	public void saveChanges() throws FileNotFoundException, IOException {
-		File file = new File(id);
+		File file = new File(getId()+getName());
 		
 		
 		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
@@ -138,11 +156,11 @@ public class Club implements Comparable<Club> {
 	
 	public void loadChanges() throws FileNotFoundException, IOException, ClassNotFoundException {
 		
-		File file = new File(id);
+		File file = new File(getId()+getName());
 		
 		if (file.exists()) {
 			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
-			clients = (ArrayList<Person>)ois.readObject();
+			clients = (ArrayList<Person>) ois.readObject();
 			ois.close();
 		}
 	}
@@ -236,6 +254,10 @@ public class Club implements Comparable<Club> {
 		}
 		
 		return sorted;
+	}
+	
+	public void removeOneObjectPerson(Person person) {
+		clients.remove(person);
 	}
 	
 	

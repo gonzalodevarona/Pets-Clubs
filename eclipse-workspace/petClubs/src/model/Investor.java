@@ -16,7 +16,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 
@@ -52,8 +54,8 @@ public class Investor {
 	}
 	
 	public void loadClubsPlainText() throws FileNotFoundException, IOException{
-		String filePath = Club.CLUBSCSV;
-		File file = new File(filePath);
+		
+		File file = new File(Club.CLUBSCSV);
 	
 	
 		FileReader reader = new FileReader(file);
@@ -63,7 +65,7 @@ public class Investor {
 		String[] words = new String[3];
 		
 		while (line != null) {
-			words = line.split(",");
+			words = line.split(";");
 			
 			String idC = words[0];
 			String nameC = words[1];
@@ -88,6 +90,26 @@ public class Investor {
 		
 	}
 	
+	public void saveClubsCVS() throws FileNotFoundException {
+		File file = new File(Club.CLUBSCSV);
+		PrintWriter pr = new PrintWriter(file);
+		for (int i = 0; i < clubs.size(); i++) {
+			Club clubInMatter = clubs.get(i);
+			Calendar date = clubInMatter.getIssueDate();
+			int month = date.get(Calendar.MONTH) +1;
+			int day = date.get(Calendar.DATE);
+			int year = date.get(Calendar.YEAR);
+			
+			
+			
+			String chain = clubInMatter.getId()+";"+clubInMatter.getName()+";"+day+"-"+month+"-"+year;
+			pr.println(chain);
+		}
+		
+		pr.close();
+		
+	}
+	
 	public void loadPeoplePlainText() throws FileNotFoundException, IOException {
 		String filePath = Person.PEOPLECSV;
 		File file = new File(filePath);
@@ -99,7 +121,8 @@ public class Investor {
 		String line = bufferR.readLine();
 		String[] words = new String[5];
 		int j = 0;
-		for (int i = 0;line != null; i ++) {
+		
+		while (line != null) {
 			words = line.split(";");
 			
 			String idP = words[0];

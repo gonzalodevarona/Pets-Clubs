@@ -11,14 +11,17 @@
 
 
 package ui;
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.*;
-import model.*;
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
+import model.Club;
+import model.Investor;
+import model.Person;
+import model.Pet;
 
 public class Main {
 	
@@ -26,6 +29,8 @@ public class Main {
 	private Investor investor;
 	
 	public Main() {
+		
+		investor = new Investor();
 		reader = new Scanner(System.in);
 	}
 	
@@ -65,9 +70,15 @@ public class Main {
 	public void menu(){
 		int userInput = 0;
 		
-		//DEPENDENCE
-		investor = new Investor();
 		
+		try {
+			investor.loadClubsPlainText();
+//			investor.loadPeoplePlainText();
+//			investor.loadPetsPlainText();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} 
 		System.out.println("");
 		System.out.println("");
 
@@ -77,7 +88,7 @@ public class Main {
 		System.out.println("M  MMP  MMP  M .d8888b. 88 .d8888b. .d8888b. 88d8b.d8b. .d8888b.   ");
 		System.out.println("M  MM'  MM' .M 88ooood8 88 88'    ` 88'  `88 88'`88'`88 88ooood8");
 		System.out.println("M  `' . '' .MM 88.  ... 88 88.  ... 88.  .88 88  88  88 88.  ...   ");
-		System.out.println("M    .d  .dMMM `88888P' dP `88888P' `88888P' dP  dP  dP `88888P'   JSON");
+		System.out.println("M    .d  .dMMM `88888P' dP `88888P' `88888P' dP  dP  dP `88888P'   TO CLUBS4PETS");
 		System.out.println("MMMMMMMMMMMMMM                                                     ");
 		System.out.println("                                                                   ");                                                      
 	
@@ -126,14 +137,14 @@ public class Main {
 						eraseAPet(); 
 						break;
 	
-					//QUIT PROGRAM
+					//SHOW CLIENTS SORTED BY NUMBER OF PETS (HIGHEST-LOWEST) 
 					case 7: 
-						theGoodbye();
+						clientsSortedByNumberOfPetsHILO();
 						break;
 						
-					//QUIT PROGRAM
+					//SHOW CLUBS SORTED BY NUMBER OF CLIENTS (HIGHEST-LOWEST) 
 					case 8: 
-						theGoodbye();
+						clubsSortedByNumberOfClientsHILO();
 						break;
 						
 					//QUIT PROGRAM
@@ -147,7 +158,7 @@ public class Main {
 						break;
 						
 					//QUIT PROGRAM
-					case 11: 
+					case 15: 
 						theGoodbye();
 						break;
 	
@@ -169,27 +180,144 @@ public class Main {
 		
 	}
 		
-		private void eraseAPet() {
-		// TODO Auto-generated method stub
+	private void clientsSortedByNumberOfPetsHILO() {
+		System.out.println("CLIENTS SORTED BY NUMBER OF PETS (HIGH-LOW)");
+		System.out.println("");
+		ArrayList<Person> people = investor.sortByClientsNumberOfPets();
 		
+		for (int i = 0; i < people.size(); i++) {
+			System.out.println(people.get(i).getName()+" - "+people.get(i).howManyPetsDoIOwn());
 		}
+	}
+	
+	private void clubsSortedByNumberOfClientsHILO() {
+		System.out.println("CLUBS SORTED BY NUMBER OF CLIENTS (HIGH-LOW)");
+		System.out.println("");
+		ArrayList<Club> clubs = investor.sortByNumberOfClients();
+		
+		for (int i = 0; i < clubs.size(); i++) {
+			System.out.println(clubs.get(i).getName()+" - "+clubs.get(i).howManyClientsInTheClub());
+		}
+	}
 
-
-		private void eraseAClient() {
-			try {
-				System.out.println("");
-				System.out.print("Please type the club's ID to find the client to delete: "); String id = reader.nextLine();
-				System.out.println("");
-				Club myClub = investor.findClub(id);
+	private void eraseAPet() {
+		try {
+			
+			
+			System.out.print("Please type the club's ID of the pet's owner to delete: "); String id = reader.nextLine();
+			System.out.println("");
+			Club myClub = investor.findClub(id);
+					
+					
 				if (myClub != null) {
 					
-					
-					
+							System.out.print("Please type the client's ID: "); String idP = reader.nextLine();
+							Person person = myClub.findPersonBinary(idP);
+						
+							
+						if (person != null) {
+							System.out.println("");
+							System.out.println("Find the pet to delete by ID or name:");
+							System.out.println("1. ID.");
+							System.out.println("2. Name.");
+							System.out.println("");
+							int selection = reader.nextInt(); reader.nextLine();
+							Pet pet = null;
+							
+							if (selection ==1 || selection ==2 ) {
+								if (selection ==1) {
+									System.out.print("Please type the pet's ID: "); String idp = reader.nextLine();
+									pet = person.findPetBinary(idp);
+									
+								} else {
+									System.out.print("Please type the pet's name: "); String name = reader.nextLine();
+									pet = person.findPetBinaryByName(name);
+									}
+								if (pet != null) {
+									person.removeOneObjectPet(pet);
+									System.out.println("");
+									System.out.println(pet.getName()+" was deleted from owner: "+ person.getId());
+									System.out.println("");
+								}else {
+									System.out.println("");
+									System.out.println("ERROR: Pet not found");
+									System.out.println("");
+									}
+								
+								
+							} else {
+								System.out.println("");
+								System.out.println("ERROR: Invalid selection");
+								System.out.println("");
+								}
+							
+							
+						}
 					
 					
 				} else {
-					System.out.println("ERROR: Club not found.");
-					} 
+					System.out.println("");
+					System.out.println("ERROR: Club not found");
+					System.out.println("");
+					}
+			 
+			
+		} catch (InputMismatchException e) {
+			System.out.println("ERROR: Wrong data type.");
+		}
+	
+	}
+
+
+		
+		private void eraseAClient() {
+			try {
+				
+				
+				System.out.print("Please type the club's ID of the client to delete: "); String id = reader.nextLine();
+				System.out.println("");
+				Club myClub = investor.findClub(id);
+						
+						
+					if (myClub != null) {
+						System.out.println("");
+						System.out.println("Find the client to delete by ID or name:");
+						System.out.println("1. ID.");
+						System.out.println("2. Name.");
+						System.out.println("");
+						int selection = reader.nextInt(); reader.nextLine();
+						
+						Person person = null;
+						
+						//MUST CHECK AFTER VICTOR TELLS ME IF I CAN SEARCH CLIENT BY NAME
+						
+						if (selection ==1 || selection ==2 ) {
+							if (selection ==1) {
+								System.out.print("Please type the client's ID: "); String idP = reader.nextLine();
+								person = myClub.findPersonBinary(idP);
+							} else {//APT TO VICTORs ANSWER
+								}
+							if (person != null) {
+								myClub.removeOneObjectPerson(person);
+								System.out.println("");
+								System.out.println(person.getName()+" was deleted from club:"+ myClub.getId());
+								System.out.println("");
+							}
+							
+							
+						} else {
+							System.out.println("");
+							System.out.println("ERROR: Invalid selection");
+							System.out.println("");
+							}
+						
+						
+					} else {
+						System.out.println("");
+						System.out.println("ERROR: Club not found");
+						System.out.println("");
+						}
+				 
 				
 			} catch (InputMismatchException e) {
 				System.out.println("ERROR: Wrong data type.");
@@ -257,10 +385,9 @@ public class Main {
 			try {
 				System.out.println("REGISTER PET (every client must have at least one pet to be in a club)");
 				System.out.println("");
+				System.out.println("");
 				System.out.print("Please type the pet's ID: "); String idp = reader.nextLine();
 				System.out.print("Please type the pet's name: "); String nameP = reader.nextLine();
-				System.out.println("");
-			
 			
 				System.out.print("Please write the pet's type: "); String typeP = reader.nextLine();
 				System.out.println("Please select the pet's gender: ");
@@ -278,18 +405,20 @@ public class Main {
 					System.out.print("Please type the pet's birth month: "); int monthP = reader.nextInt(); reader.nextLine();
 					System.out.print("Please type the pet's birth year: "); int yearP = reader.nextInt(); reader.nextLine();
 					System.out.println("");
-					
+					monthP = monthP -1;
 					GregorianCalendar now = new GregorianCalendar();
 					GregorianCalendar birthDateP = new GregorianCalendar(yearP, monthP, dayP);
 					System.out.println("");
 					
 					if(birthDateP.compareTo(now) <= 0 && yearP>=1970) {
 						if (person != null) {
-							if (person.isThereADoppelganger(nameP) == false) {
+							
+							if (person.isThereADoppelganger(nameP, idp) == false) {
 								Pet pet = new Pet(idp, nameP, birthDateP, gender, typeP, person);
 								person.addPet(pet);
+								System.out.println("Sucessfully added "+pet.getName()+" to "+person.getName());
 							} else {
-								System.out.println("ERROR: This client already has a pet with this name.");
+								System.out.println("ERROR: This client already has a pet with this name or ID.");
 							}
 							
 						} else {
@@ -300,11 +429,12 @@ public class Main {
 								System.out.print("Please type the owner's ID:"); String idOwner = reader.nextLine();
 								Person p = mainC.findPersonBinary(idOwner);
 								if (p != null) {
-									if (p.isThereADoppelganger(nameP) == false) {
+									if (p.isThereADoppelganger(nameP, idp) == false) {
 										Pet pet = new Pet(idp, nameP, birthDateP, gender, typeP, p);
 										p.addPet(pet);
+										System.out.println("Sucessfully added "+pet.getName()+" to "+p.getName());
 									} else {
-										System.out.println("ERROR: This client already has a pet with this name.");
+										System.out.println("ERROR: This client already has a pet with this name or ID.");
 									}
 									
 								} else {
@@ -359,6 +489,7 @@ public class Main {
 						System.out.print("Please type the new client's birth month: "); int month = reader.nextInt(); reader.nextLine();
 						System.out.print("Please type the new client's birth year: "); int year = reader.nextInt(); reader.nextLine();
 						System.out.println("");
+						month = month -1;
 						System.out.print("Please type the new client's favorite type of pet: "); String favType = reader.nextLine();
 						GregorianCalendar now = new GregorianCalendar();
 						GregorianCalendar birthDate = new GregorianCalendar(year, month, day);
@@ -408,7 +539,7 @@ public class Main {
 				System.out.print("Please type the club's issue day: "); int day = reader.nextInt(); reader.nextLine();
 				System.out.print("Please type the club's issue month: "); int month = reader.nextInt(); reader.nextLine();
 				System.out.print("Please type the club's issue year: "); int year = reader.nextInt(); reader.nextLine();
-	
+				month = month -1;
 				GregorianCalendar now = new GregorianCalendar();
 				GregorianCalendar issueDate = new GregorianCalendar(year, month, day);
 				System.out.println("");
@@ -416,7 +547,7 @@ public class Main {
 				if(issueDate.compareTo(now) <= 0 && year >=1970) {
 					if(!(name.equals("")) && !(id.equals(""))){
 						if (investor.isThereADoppelgangerClub(id) == false) {
-							Club theNew = new Club(name, id, issueDate);
+							Club theNew = new Club( id, name, issueDate);
 							investor.addClub(theNew);
 							System.out.println("*****************************************\n");
 							System.out.println("* New club has been successfully added! *\n");
@@ -444,10 +575,22 @@ public class Main {
 		
 
 		public void theGoodbye() {
-			System.out.print("\033[H\033[2J");  
-			System.out.flush(); 
+			try {
+				investor.saveClubsCVS();
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 			System.out.println("");
-			System.out.println("THANK YOU FOR USING MY LIL PET SOFTWARE");
+			System.out.println("");
+			System.out.println("");
+			System.out.println("");
+			System.out.println("");
+			System.out.println("");
+			System.out.println("");
+			System.out.println("");
+			System.out.println("THANK YOU FOR USING CLUBS4PETS SOFTWARE");
 			System.out.println("");
 		}
 		

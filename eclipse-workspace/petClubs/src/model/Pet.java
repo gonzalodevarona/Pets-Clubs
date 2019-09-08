@@ -12,17 +12,13 @@
 package model;
 
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.Comparator;
 import java.util.GregorianCalendar;
 
 
 
-public class Pet implements Serializable {
+public class Pet implements Serializable, Comparable<Pet>, Comparator<Pet> {
 	
 	//CONSTANTS
 
@@ -94,6 +90,36 @@ public class Pet implements Serializable {
 	public void setOwner(Person owner) {
 		this.owner = owner;
 	}
+	
+	@Override
+	public int compare(Pet pet1, Pet pet2) {
+			
+		int value = 0;
+		String pet1ID = pet1.getId();
+		String pet2ID = pet2.getId();
+    	if(pet1ID.compareTo(pet2ID) >0){
+    		value = 1;
+    	}else if(pet1ID.compareTo(pet2ID) <0){
+    		value = -1;
+    	} 
+        
+		return value;
+			
+	 }
+
+	public int compareTo(Pet pet) {
+		int value = 0;
+		 
+    	if(getName().compareTo(pet.getName()) >0){
+    		value = 1;
+    	}else if(getName().compareTo(pet.getName()) <0){
+    		value = -1;
+    	}
+        return value;
+		
+	}
+
+	
 	
 	
 	
