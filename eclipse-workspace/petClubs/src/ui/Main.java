@@ -147,14 +147,14 @@ public class Main {
 						clubsSortedByNumberOfClientsHILO();
 						break;
 						
-					//QUIT PROGRAM
+					//SORT CLUBS BY A FIELD
 					case 9: 
-						theGoodbye();
+						sortClubsByField();
 						break;
 						
-						//QUIT PROGRAM
+					//SORT CLIENTS IN A CLUB BY A FIELD
 					case 10: 
-						theGoodbye();
+						sortClientsByField();
 						break;
 						
 					//QUIT PROGRAM
@@ -180,7 +180,69 @@ public class Main {
 		
 	}
 		
-	private void clientsSortedByNumberOfPetsHILO() {
+	public void sortClientsByField() {
+		System.out.print("Please type the club's ID in order to sort its clients: "); String id = reader.nextLine();
+		System.out.println("");
+		Club myClub = investor.findClub(id);
+		if (myClub != null) {
+			
+		
+			System.out.println("Please select a field in order to sort all clients by it:");
+			System.out.println("1. ID");
+			System.out.println("2. Name");
+			System.out.println("3. Last name");
+			System.out.println("4. Birth date (youngest to oldest)");
+			System.out.println("5. Favorite type of pet");
+			System.out.println("note: every field is sorted upwards except issue date");
+			System.out.println();
+			
+			int selection = reader.nextInt(); reader.nextLine();
+			
+			
+			if (selection>= 1 && selection<=5 ) {
+				System.out.println(investor.convertSortedClients2String(selection, myClub));
+				System.out.println();
+				
+			} else {
+				System.out.println("");
+				System.out.println("ERROR: Invalid selection");
+				System.out.println("");
+				}
+	} else {
+		System.out.println("");
+		System.out.println("ERROR: Club not found");
+		System.out.println("");
+		}
+		
+		
+	}
+
+	public void sortClubsByField() {
+		System.out.println("Please select a field in order to sort all clubs by it:");
+		System.out.println("1. ID");
+		System.out.println("2. Name");
+		System.out.println("3. Issue date (newest to oldest)");
+		System.out.println("4. Type of pet");
+		System.out.println("note: every field is sorted upwards except issue date");
+		System.out.println();
+		
+		int selection = reader.nextInt(); reader.nextLine();
+		
+		
+		if (selection>= 1 && selection<=4 ) {
+			System.out.println(investor.convertSortedClubs2String(selection));
+			System.out.println();
+			
+		} else {
+			System.out.println("");
+			System.out.println("ERROR: Invalid selection");
+			System.out.println("");
+			}
+		
+		
+	}
+
+	public void clientsSortedByNumberOfPetsHILO() {
 		System.out.println("CLIENTS SORTED BY NUMBER OF PETS (HIGH-LOW)");
 		System.out.println("");
 		ArrayList<Person> people = investor.sortByClientsNumberOfPets();
@@ -190,7 +252,7 @@ public class Main {
 		}
 	}
 	
-	private void clubsSortedByNumberOfClientsHILO() {
+	public void clubsSortedByNumberOfClientsHILO() {
 		System.out.println("CLUBS SORTED BY NUMBER OF CLIENTS (HIGH-LOW)");
 		System.out.println("");
 		ArrayList<Club> clubs = investor.sortByNumberOfClients();
@@ -200,7 +262,7 @@ public class Main {
 		}
 	}
 
-	private void eraseAPet() {
+	public void eraseAPet() {
 		try {
 			
 			
@@ -252,7 +314,11 @@ public class Main {
 								}
 							
 							
-						}
+						} else {
+							System.out.println("");
+							System.out.println("ERROR: Person not found");
+							System.out.println("");
+							}
 					
 					
 				} else {
@@ -270,7 +336,7 @@ public class Main {
 
 
 		
-		private void eraseAClient() {
+	public void eraseAClient() {
 			try {
 				
 				
@@ -289,20 +355,41 @@ public class Main {
 						
 						Person person = null;
 						
-						//MUST CHECK AFTER VICTOR TELLS ME IF I CAN SEARCH CLIENT BY NAME
+						
 						
 						if (selection ==1 || selection ==2 ) {
 							if (selection ==1) {
 								System.out.print("Please type the client's ID: "); String idP = reader.nextLine();
 								person = myClub.findPersonBinary(idP);
-							} else {//APT TO VICTORs ANSWER
+								if (person != null) {
+									myClub.removeOneObjectPerson(person);
+									System.out.println("");
+									System.out.println(person.getName()+" was deleted from club:"+ myClub.getId());
+									System.out.println("");
+								} else {
+									System.out.println("");
+									System.out.println("ERROR: Person not found");
+									System.out.println("");
+									}
+							} else {
+								System.out.print("Please type the client's name: "); String name = reader.nextLine();
+								person = myClub.findPersonBinaryName(name);
+								
+								if(person == null) {
+									System.out.println("");
+									System.out.println("ERROR: Person not found");
+									System.out.println("");
+									}
+								while (person != null) {
+									myClub.removeOneObjectPerson(person);
+									System.out.println("");
+									System.out.println(person.getName()+" was deleted from club: "+ myClub.getId());
+									System.out.println("");
+									person = myClub.findPersonBinaryName(name);
 								}
-							if (person != null) {
-								myClub.removeOneObjectPerson(person);
-								System.out.println("");
-								System.out.println(person.getName()+" was deleted from club:"+ myClub.getId());
-								System.out.println("");
+								
 							}
+							
 							
 							
 						} else {
@@ -325,7 +412,7 @@ public class Main {
 		
 		}
 		
-		private void eraseAClub() {
+	public void eraseAClub() {
 			try {
 				
 				System.out.println("");
@@ -381,7 +468,7 @@ public class Main {
 		
 		}
 
-		private void addPet(Person person) {
+	public void addPet(Person person) {
 			try {
 				System.out.println("REGISTER PET (every client must have at least one pet to be in a club)");
 				System.out.println("");
@@ -472,7 +559,7 @@ public class Main {
 		
 		
 
-		private void registerANewClient() {
+	public void registerANewClient() {
 			try {
 				System.out.println("");
 				System.out.print("Please type the club's ID where the new client will be added: "); String id = reader.nextLine();
@@ -530,7 +617,7 @@ public class Main {
 		
 		
 
-		 private void registerANewClub() {
+	public void registerANewClub() {
 			try {
 			 	System.out.println("");
 				System.out.print("Please type the club's name: "); String name = reader.nextLine();

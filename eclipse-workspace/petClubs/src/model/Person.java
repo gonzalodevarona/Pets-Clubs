@@ -22,6 +22,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Comparator;
 import java.util.GregorianCalendar;
 
@@ -139,11 +140,41 @@ public class Person implements Serializable, Comparable<Person>, Comparator<Pers
 	public int compare(Person person1, Person person2) {
 			
 		int value = 0;
-		String person1Name = person1.getId();
-		String person2Name = person2.getId();
+		String person1ID = person1.getId();
+		String person2ID = person2.getId();
+    	if(person1ID.compareTo(person2ID) >0){
+    		value = 1;
+    	}else if(person1ID.compareTo(person2ID) <0){
+    		value = -1;
+    	} 
+        
+		return value;
+			
+	 }
+	
+	public int compareName(Person person1, Person person2) {
+		
+		int value = 0;
+		String person1Name = person1.getName();
+		String person2Name = person2.getName();
     	if(person1Name.compareTo(person2Name) >0){
     		value = 1;
     	}else if(person1Name.compareTo(person2Name) <0){
+    		value = -1;
+    	} 
+        
+		return value;
+			
+	 }
+	
+public int compareLastName(Person person1, Person person2) {
+		
+		int value = 0;
+		String person1LastName = person1.getLastName();
+		String person2LastName = person2.getLastName();
+    	if(person1LastName.compareTo(person2LastName) >0){
+    		value = 1;
+    	}else if(person1LastName.compareTo(person2LastName) <0){
     		value = -1;
     	} 
         
@@ -261,6 +292,44 @@ public class Person implements Serializable, Comparable<Person>, Comparator<Pers
 		}
 		
 		return stop;
+	}
+
+	public int compareDate(Person person1, Person person2) {
+		int value = 0;
+		GregorianCalendar person1Date = person1.getBirthDate();
+		GregorianCalendar person2Date = person2.getBirthDate();
+    	if(person1Date.compareTo(person2Date) >0){
+    		value = 1;
+    	}else if(person1Date.compareTo(person2Date) <0){
+    		value = -1;
+    	} 
+        
+		return value;
+	}
+
+
+	public String date2String() {
+		Calendar date = getBirthDate();
+		int month = date.get(Calendar.MONTH) +1;
+		int day = date.get(Calendar.DATE);
+		int year = date.get(Calendar.YEAR);
+		String dates = day+"-"+month+"-"+year;
+		
+		return dates;
+	}
+
+
+	public int compareType(Person person1, Person person2) {
+		int value = 0;
+		String person1Type = person1.getFavTypePet();
+		String person2Type = person2.getFavTypePet();
+    	if(person1Type.compareTo(person2Type) >0){
+    		value = 1;
+    	}else if(person1Type.compareTo(person2Type) <0){
+    		value = -1;
+    	} 
+        
+		return value;
 	}
 
 

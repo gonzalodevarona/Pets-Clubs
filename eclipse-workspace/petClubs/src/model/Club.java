@@ -20,9 +20,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Comparator;
 import java.util.GregorianCalendar;
 
-public class Club implements Comparable<Club> {
+public class Club implements Comparable<Club>, Comparator<Club> {
 	
 	public final static String CLUBSCSV = "data/Clubs.csv";
 	
@@ -38,7 +40,7 @@ public class Club implements Comparable<Club> {
 		this.id = id;
 		this.name = name;
 		this.issueDate = issueDate;
-		typeOfPet = "";
+		typeOfPet = "NOTHING";
 		clients = new ArrayList<Person>();
 	}
 	
@@ -240,6 +242,26 @@ public class Club implements Comparable<Club> {
 		return stop;
 	}
 	
+	public Person findPersonBinaryName(String person) {
+		Person stop = null;
+		ArrayList<Person> sortedByName = sortClientsByName(); //- 2 +
+		int begin = 0;
+		int end = sortedByName.size() -1;
+		int medium = (begin+end)/2;
+		while (begin <= end && stop == null) {
+			String name2Evaluate = sortedByName.get(medium).getName();
+			if(name2Evaluate.equalsIgnoreCase(person)) {
+				stop = sortedByName.get(medium); 
+			} else if(id.compareTo(name2Evaluate)>0) {
+				begin = medium +1;
+			} else {
+				end = medium -1;
+			}
+		}
+		
+		return stop;
+	}
+	
 	public ArrayList<Person> sortClientsById(){
 		ArrayList<Person> sorted = getClients();
 		for (int i = 1; i < sorted.size(); i++) {
@@ -256,9 +278,201 @@ public class Club implements Comparable<Club> {
 		return sorted;
 	}
 	
+	public ArrayList<Person> sortClientsByName(){
+		ArrayList<Person> sorted = getClients();
+		for (int i = 1; i < sorted.size(); i++) {
+			for (int j = i; j > 0; j--) {
+				
+				if (sorted.get(j).compareName(sorted.get(j), sorted.get(j-1)) < 0) {
+					Person temp = sorted.get(j);
+					sorted.set(j, sorted.get(j-1)) ;
+					sorted.set(j-1, temp) ;
+				} 
+			}
+		}
+		
+		return sorted;
+	}
+	
+	public ArrayList<Person> sortClientsByDate(){
+		ArrayList<Person> sorted = getClients();
+		for (int i = 1; i < sorted.size(); i++) {
+			for (int j = i; j > 0; j--) {
+				
+				if (sorted.get(j).compareDate(sorted.get(j), sorted.get(j-1)) < 0) {
+					Person temp = sorted.get(j);
+					sorted.set(j, sorted.get(j-1)) ;
+					sorted.set(j-1, temp) ;
+				} 
+			}
+		}
+		
+		return sorted;
+	}
+	
+	public ArrayList<Person> sortClientsByType(){
+		ArrayList<Person> sorted = getClients();
+		for (int i = 1; i < sorted.size(); i++) {
+			for (int j = i; j > 0; j--) {
+				
+				if (sorted.get(j).compareType(sorted.get(j), sorted.get(j-1)) < 0) {
+					Person temp = sorted.get(j);
+					sorted.set(j, sorted.get(j-1)) ;
+					sorted.set(j-1, temp) ;
+				} 
+			}
+		}
+		
+		return sorted;
+	}
+	
 	public void removeOneObjectPerson(Person person) {
 		clients.remove(person);
 	}
+
+
+	@Override
+	public int compare(Club club1, Club club2) {
+		int value = 0;
+		String club1ID = club1.getId();
+		String club2ID = club2.getId();
+    	if(club1ID.compareTo(club2ID) >0){
+    		value = 1;
+    	}else if(club1ID.compareTo(club2ID) <0){
+    		value = -1;
+    	} 
+        
+		return value;
+	}
+	
+	public int compareName(Club club1, Club club2) {
+		int value = 0;
+		String club1Name = club1.getName();
+		String club2Name = club2.getName();
+    	if(club1Name.compareTo(club2Name) >0){
+    		value = 1;
+    	}else if(club1Name.compareTo(club2Name) <0){
+    		value = -1;
+    	} 
+        
+		return value;
+	}
+	
+	public int compareType(Club club1, Club club2) {
+		int value = 0;
+		String club1Type = club1.getTypeOfPet();
+		String club2Type = club2.getTypeOfPet();
+    	if(club1Type.compareTo(club2Type) >0){
+    		value = 1;
+    	}else if(club1Type.compareTo(club2Type) <0){
+    		value = -1;
+    	} 
+        
+		return value;
+	}
+	
+	public String date2String() {
+		
+		Calendar date = getIssueDate();
+		int month = date.get(Calendar.MONTH) +1;
+		int day = date.get(Calendar.DATE);
+		int year = date.get(Calendar.YEAR);
+		String dates = day+"-"+month+"-"+year;
+		
+		return dates;
+	}
+
+
+	public int compareDate(Club club1, Club club2) {
+		int value = 0;
+		GregorianCalendar club1Date = club1.getIssueDate();
+		GregorianCalendar club2Date = club2.getIssueDate();
+    	if(club1Date.compareTo(club2Date) >0){
+    		value = 1;
+    	}else if(club1Date.compareTo(club1Date) <0){
+    		value = -1;
+    	} 
+        
+		return value;
+	}
+	
+	public String convertSortedClients2String(int i) {
+		String bigOne = "\n";
+		ArrayList<Person> printThis = null;
+		switch (i) {
+		case 1:
+			printThis = sortClientsById();
+			
+			break;
+		case 2:
+			printThis = sortClientsByName();		
+			break;
+					
+		case 3:
+			printThis = sortClientsByLastName();
+			break;
+			
+		case 4:
+			printThis = sortClientsByDate();
+			break;
+		case 5:
+			printThis = sortClientsByType();
+			break;
+		
+	
+
+		default:
+			break;
+		}
+		
+		for (int j = 0; j < printThis.size(); j++) {
+			bigOne += printThis.get(j).getName();
+			switch (i) {
+			case 1:
+				bigOne += " - "+printThis.get(j).getId()+"\n";
+				break;
+			
+			case 2:
+				bigOne += "\n";
+				break;
+			
+			case 3:
+				bigOne += " - "+printThis.get(j).getLastName()+"\n";
+				break;
+				
+			case 4:
+				bigOne += " - "+printThis.get(j).date2String()+"\n";
+				break;
+			case 5:
+				bigOne += " - "+printThis.get(j).getFavTypePet()+"\n";
+				break;
+
+			default:
+				break;
+			}
+		}
+		
+		
+		return bigOne;
+	}
+
+
+	private ArrayList<Person> sortClientsByLastName() {
+		ArrayList<Person> sorted = getClients();
+		for (int i = 1; i < sorted.size(); i++) {
+			for (int j = i; j > 0; j--) {
+				
+				if (sorted.get(j).compareLastName(sorted.get(j), sorted.get(j-1)) < 0) {
+					Person temp = sorted.get(j);
+					sorted.set(j, sorted.get(j-1)) ;
+					sorted.set(j-1, temp) ;
+				} 
+			}
+		}
+		
+		return sorted;
+	}
+
 	
 	
 	

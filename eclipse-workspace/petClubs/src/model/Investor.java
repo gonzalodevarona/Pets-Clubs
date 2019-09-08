@@ -95,14 +95,8 @@ public class Investor {
 		PrintWriter pr = new PrintWriter(file);
 		for (int i = 0; i < clubs.size(); i++) {
 			Club clubInMatter = clubs.get(i);
-			Calendar date = clubInMatter.getIssueDate();
-			int month = date.get(Calendar.MONTH) +1;
-			int day = date.get(Calendar.DATE);
-			int year = date.get(Calendar.YEAR);
 			
-			
-			
-			String chain = clubInMatter.getId()+";"+clubInMatter.getName()+";"+day+"-"+month+"-"+year;
+			String chain = clubInMatter.getId()+";"+clubInMatter.getName()+";"+clubInMatter.date2String();
 			pr.println(chain);
 		}
 		
@@ -341,6 +335,138 @@ public class Investor {
 	public void removeOneObjectClub(Club club) {
 		clubs.remove(club);
 	}
+	
+	public ArrayList<Club> sortClubsById(){
+		ArrayList<Club> sorted = getClubs();
+		
+		for (int i = 1; i < sorted.size(); i++) {
+			for (int j = i; j > 0; j--) {
+				
+				if (sorted.get(j).compare(sorted.get(j), sorted.get(j-1)) < 0) {
+					Club temp = sorted.get(j);
+					sorted.set(j, sorted.get(j-1)) ;
+					sorted.set(j-1, temp) ;
+				} 
+			}
+		}
+		
+		
+		return sorted;
+	}
+	
+	public ArrayList<Club> sortClubsByName(){
+		ArrayList<Club> sorted = getClubs();
+		
+		for (int i = 1; i < sorted.size(); i++) {
+			for (int j = i; j > 0; j--) {
+				
+				if (sorted.get(j).compareName(sorted.get(j), sorted.get(j-1)) < 0) {
+					Club temp = sorted.get(j);
+					sorted.set(j, sorted.get(j-1)) ;
+					sorted.set(j-1, temp) ;
+				} 
+			}
+		}
+		
+		
+		return sorted;
+	}
+	
+	public ArrayList<Club> sortClubsByType(){
+		ArrayList<Club> sorted = getClubs();
+		
+		for (int i = 1; i < sorted.size(); i++) {
+			for (int j = i; j > 0; j--) {
+				
+				if (sorted.get(j).compareType(sorted.get(j), sorted.get(j-1)) < 0) {
+					Club temp = sorted.get(j);
+					sorted.set(j, sorted.get(j-1)) ;
+					sorted.set(j-1, temp) ;
+				} 
+			}
+		}
+		
+		
+		return sorted;
+	}
+	
+	public ArrayList<Club> sortClubsByDate() {
+		ArrayList<Club> sorted = getClubs();
+		
+		for (int i = 1; i < sorted.size(); i++) {
+			for (int j = i; j > 0; j--) {
+				
+				if (sorted.get(j).compareDate(sorted.get(j), sorted.get(j-1)) < 0) {
+					Club temp = sorted.get(j);
+					sorted.set(j, sorted.get(j-1)) ;
+					sorted.set(j-1, temp) ;
+				} 
+			}
+		}
+		
+		
+		return sorted;
+	}
+	
+	public String convertSortedClubs2String(int i) {
+		String bigOne = "\n";
+		ArrayList<Club> printThis = null;
+		switch (i) {
+		case 1:
+			printThis = sortClubsById();
+			
+			break;
+		case 2:
+			printThis = sortClubsByName();		
+			break;
+					
+		case 3:
+			printThis = sortClubsByDate();
+			break;
+			
+		case 4:
+			printThis = sortClubsByType();
+			break;
+		
+	
+
+		default:
+			break;
+		}
+		
+		for (int j = 0; j < printThis.size(); j++) {
+			bigOne += printThis.get(j).getName();
+			switch (i) {
+			case 1:
+				bigOne += " - "+printThis.get(j).getId()+"\n";
+				break;
+			
+			case 2:
+				bigOne += "\n";
+				break;
+			
+			case 3:
+				bigOne += " - "+printThis.get(j).date2String()+"\n";
+				break;
+			case 4:
+				bigOne += " - "+printThis.get(j).getTypeOfPet()+"\n";
+				break;
+
+			default:
+				break;
+			}
+		}
+		
+		
+		return bigOne;
+	}
+	
+	public String convertSortedClients2String(int i, Club club) {
+		return club.convertSortedClients2String(i);
+	}
+	
+	
+
 	
 	
 	
