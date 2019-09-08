@@ -12,18 +12,13 @@
 
 package model;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.GregorianCalendar;
 
-public class Person implements Serializable, Comparable<Person> {
+public class Person implements Serializable, Comparable<Person>, Comparator<Person> {
 	
 	public final static String PEOPLECSV = "data/People.csv";
 	
@@ -102,27 +97,6 @@ public class Person implements Serializable, Comparable<Person> {
 		return pets.size();
 	}
 	
-	public void saveChanges() throws FileNotFoundException, IOException {
-		File file = new File(Pet.PETSCSV);
-		
-		
-		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
-		oos.writeObject(pets);
-		oos.close();
-			
-		
-	}
-	
-	public void loadChanges() throws FileNotFoundException, IOException, ClassNotFoundException {
-		
-		File file = new File(Pet.PETSCSV);
-		
-		if (file.exists()) {
-			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
-			pets = (ArrayList<Pet>)ois.readObject();
-			ois.close();
-		}
-	}
 
 	public int compareTo(Person person) {
 		int value = 0;
@@ -135,6 +109,61 @@ public class Person implements Serializable, Comparable<Person> {
         return value;
 		
 	}
+	
+	
+	
+	public int howManyOfEachType(String type) {
+		int numberOf =0;
+		for (int i = 0; i < pets.size(); i++) {
+			Pet trying = pets.get(i);
+			if (trying.getType().equalsIgnoreCase(type)) {
+				++numberOf;
+			}
+		}
+		
+		return numberOf;
+	}
+	
+	
+//	public String deletePet(String chain, int type) {
+//		String mssg ="ERROR: Pet not found.";
+//		if(type ==1) {
+//			int
+//		} else {
+//			
+//		}
+//		return mssg;
+//	}
+
+	public boolean isThereADoppelganger(String known) {
+		boolean stop = false;
+		for (int i = 0; i < pets.size() && !stop; i++) {
+			if (pets.get(i).getName().equalsIgnoreCase(known)) {
+				stop = true;
+			}
+		}
+		
+		return stop;
+	}
+
+
+	@Override
+	public int compare(Person person1, Person person2) {
+			
+		int value = 0;
+		String person1Name = person1.getId();
+		String person2Name = person2.getId();
+    	if(person1Name.compareTo(person2Name) >0){
+    		value = 1;
+    	}else if(person1Name.compareTo(person2Name) <0){
+    		value = -1;
+    	} 
+        
+		return value;
+			
+	 }
+	
+	
 	
 	
 	

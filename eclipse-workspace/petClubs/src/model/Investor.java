@@ -70,9 +70,9 @@ public class Investor {
 			
 			String[] dateArray = words[2].split("-");
 			
-			int day = Integer.parseInt(dateArray[2]);
+			int day = Integer.parseInt(dateArray[0]);
 			int month = ((Integer.parseInt(dateArray[1])) - 1);
-			int year = Integer.parseInt(dateArray[0]);
+			int year = Integer.parseInt(dateArray[2]);
 			
 			GregorianCalendar issueDateC = new GregorianCalendar(year, month, day);
 	
@@ -98,9 +98,9 @@ public class Investor {
 		
 		String line = bufferR.readLine();
 		String[] words = new String[5];
-		
+		int j = 0;
 		for (int i = 0;line != null; i ++) {
-			words = line.split(",");
+			words = line.split(";");
 			
 			String idP = words[0];
 			String nameP = words[1];
@@ -108,23 +108,22 @@ public class Investor {
 			String favTypePetP = words[4];
 			
 			
-			String[] dateArray = words[3].split("-");
+			String[] dateArray = words[3].split("/");
 			
-			int day = Integer.parseInt(dateArray[2]);
-			int month = ((Integer.parseInt(dateArray[1])) - 1);
-			int year = Integer.parseInt(dateArray[0]);
+			int day = Integer.parseInt(dateArray[1]);
+			int month = ((Integer.parseInt(dateArray[0])) - 1);
+			int year = Integer.parseInt(dateArray[2]);
 			
 			GregorianCalendar birthDateP = new GregorianCalendar(year, month, day);
 
 			
 			Person person = new Person(idP, nameP, lastNameP, birthDateP, favTypePetP);
-			
-			if(i>clubs.size()) {
-				int myRandom = (int)Math.random()*(clubs.size()-1);
-				clubs.get(myRandom).addClient(person);
+			if(j >= clubs.size()) {
+				j = 0;
+			}
 				
-			}else {clubs.get(i).addClient(person);}
-			
+			clubs.get(j).addClient(person);
+			j++;
 			
 			line = bufferR.readLine();
 		}
@@ -137,7 +136,7 @@ public class Investor {
 		
 	}
 	
-	public ArrayList<Pet> convertPlainText2ArrayList() throws FileNotFoundException, IOException {
+	public ArrayList<Pet> convertPetsPlainText2ArrayList() throws FileNotFoundException, IOException {
 		ArrayList<Pet> pets = new ArrayList<Pet>();
 		
 		String filePath = Pet.PETSCSV;
@@ -151,18 +150,18 @@ public class Investor {
 		String[] words = new String[5];
 		
 		while (line != null) {
-			words = line.split(",");
+			words = line.split(";");
 			
 			String idP = words[0];
 			String nameP = words[1];
 			char gender = words[3].charAt(0);
 			String type = words[4];
 			
-			String[] dateArray = words[2].split("-");
+			String[] dateArray = words[2].split("/");
 			
-			int day = Integer.parseInt(dateArray[2]);
-			int month = ((Integer.parseInt(dateArray[1])) - 1);
-			int year = Integer.parseInt(dateArray[0]);
+			int day = Integer.parseInt(dateArray[1]);
+			int month = ((Integer.parseInt(dateArray[0])) - 1);
+			int year = Integer.parseInt(dateArray[2]);
 			
 			GregorianCalendar birthDate = new GregorianCalendar(year, month, day);
 	
@@ -181,19 +180,148 @@ public class Investor {
 	}
 	
 	public void loadPetsPlainText() throws FileNotFoundException, IOException {
-		ArrayList<Pet> pets = convertPlainText2ArrayList();
-		
-		for (int i = 0; i < clubs.size(); i++) {
-			pets = clubs.get(i).loadPetsPlainText(pets);
-		}
-		
-		if(pets.size() !=0) {
-			for (int i = 0; i < clubs.size(); i++) {
-				pets = clubs.get(i).loadPetsPlainText(pets);
+		ArrayList<Pet> pets = convertPetsPlainText2ArrayList();
+		int i = 0;
+		while ( i <= clubs.size() && pets.size() != 0) {
+			
+			if (i>=clubs.size()) {
+				i = 0;
 			}
+			pets = clubs.get(i).loadPetsPlainText(pets);
+			i++;
 		}
 		
 	}
+	
+	public ArrayList<Club> sortByNumberOfClients(){
+		ArrayList<Club> sorted = getClubs();
+		for (int i = 1; i < sorted.size(); i++) {
+			for (int j = i; j > 0; j--) {
+				
+				if (sorted.get(j).compareTo(sorted.get(j-1)) > 0) {
+					Club temp = sorted.get(j);
+					sorted.set(j, sorted.get(j-1)) ;
+					sorted.set(j-1, temp) ;
+				} 
+			}
+		}
+		
+		return sorted;
+	}
+	
+	public ArrayList<Person> getAllClients(){
+		ArrayList<Person> everybody = new ArrayList<Person> ();
+		for (int i = 0; i < clubs.size(); i++) {
+			ArrayList<Person> each = clubs.get(i).getClients();
+			
+			for (int j = 0; j < each.size(); j++) {
+				everybody.add(each.get(j));
+			}
+		}
+		return everybody;
+	}
+	
+	public boolean isThereAClientDoppelganger(String id) {
+		boolean stop = false;
+		ArrayList<Person> sortedByName = sortByClientsById();
+		int begin = 0;
+		int end = sortedByName.size() -1;
+		int medium = (begin+end)/2;
+		while (begin <= end && !stop) {
+			String id2Evaluate = sortedByName.get(medium).getId();
+			if(id2Evaluate.equalsIgnoreCase(id)) {
+				stop = true; 
+			} else if(id.compareTo(id2Evaluate)>0) {
+				begin = medium +1;
+			} else {
+				end = medium -1;
+			}
+		}
+		
+		return stop;
+	}
+	
+	public ArrayList<Person> sortByClientsNumberOfPets(){
+		ArrayList<Person> sorted = getAllClients();
+		for (int i = 1; i < sorted.size(); i++) {
+			for (int j = i; j > 0; j--) {
+				
+				if (sorted.get(j).compareTo(sorted.get(j-1)) > 0) {
+					Person temp = sorted.get(j);
+					sorted.set(j, sorted.get(j-1)) ;
+					sorted.set(j-1, temp) ;
+				} 
+			}
+		}
+		
+		return sorted;
+	}
+	
+	public ArrayList<Person> sortByClientsById(){
+		ArrayList<Person> sorted = getAllClients();
+		for (int i = 1; i < sorted.size(); i++) {
+			for (int j = i; j > 0; j--) {
+				
+				if (sorted.get(j).compare(sorted.get(j), sorted.get(j-1)) < 0) {
+					Person temp = sorted.get(j);
+					sorted.set(j, sorted.get(j-1)) ;
+					sorted.set(j-1, temp) ;
+				} 
+			}
+		}
+		
+		return sorted;
+	}
+	
+	public Club findClub(String id) {
+		Club club = null;
+		boolean stop = false;
+		for (int i = 0; i < clubs.size() && !stop; i++) {
+			if (clubs.get(i).getId().equalsIgnoreCase(id)) {
+				club = clubs.get(i);
+				stop = true;
+			} 
+			
+		}
+		
+		
+		return club;
+	}
+	
+	public Club findClubByName(String name) {
+		Club club = null;
+		boolean stop = false;
+		for (int i = 0; i < clubs.size() && !stop; i++) {
+			if (clubs.get(i).getName().equalsIgnoreCase(name)) {
+				club = clubs.get(i);
+				stop = true;
+			} 
+			
+		}
+		
+		
+		return club;
+	}
+	
+
+	public boolean isThereADoppelgangerClub(String id) {
+		boolean stop = false;
+		for (int i = 0; i < clubs.size() && !stop; i++) {
+			if (clubs.get(i).getId().equalsIgnoreCase(id)) {
+				stop = true;
+			}
+		}
+		
+		return stop;
+	}
+	
+	public void removeOneObjectClub(Club club) {
+		clubs.remove(club);
+	}
+	
+	
+	
+	
 	
 	
 } //end of class
