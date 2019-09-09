@@ -227,8 +227,9 @@ public class Club implements Comparable<Club>, Comparator<Club> {
 		ArrayList<Person> sortedByID = sortClientsById(); //- 2 +
 		int begin = 0;
 		int end = sortedByID.size() -1;
-		int medium = (begin+end)/2;
+		
 		while (begin <= end && stop == null) {
+			int medium = (begin+end)/2;
 			String id2Evaluate = sortedByID.get(medium).getId();
 			if(id2Evaluate.equalsIgnoreCase(person)) {
 				stop = sortedByID.get(medium); 
@@ -247,8 +248,9 @@ public class Club implements Comparable<Club>, Comparator<Club> {
 		ArrayList<Person> sortedByName = sortClientsByName(); //- 2 +
 		int begin = 0;
 		int end = sortedByName.size() -1;
-		int medium = (begin+end)/2;
+		
 		while (begin <= end && stop == null) {
+			int medium = (begin+end)/2;
 			String name2Evaluate = sortedByName.get(medium).getName();
 			if(name2Evaluate.equalsIgnoreCase(person)) {
 				stop = sortedByName.get(medium); 
@@ -457,7 +459,7 @@ public class Club implements Comparable<Club>, Comparator<Club> {
 	}
 
 
-	private ArrayList<Person> sortClientsByLastName() {
+	public ArrayList<Person> sortClientsByLastName() {
 		ArrayList<Person> sorted = getClients();
 		for (int i = 1; i < sorted.size(); i++) {
 			for (int j = i; j > 0; j--) {
@@ -471,6 +473,16 @@ public class Club implements Comparable<Club>, Comparator<Club> {
 		}
 		
 		return sorted;
+	}
+	
+	public String toString() {
+		String me = "\n";
+		me += "ID: "+getId()+"\n";
+		me += "Name: "+getName()+"\n";
+		me += "Issue date: "+date2String()+"\n";
+		me += "Type of pet: "+getTypeOfPet()+"\n";
+		me += "\n";
+		return me;
 	}
 
 	

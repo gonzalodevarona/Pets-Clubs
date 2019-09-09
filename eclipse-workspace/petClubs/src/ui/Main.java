@@ -151,9 +151,29 @@ public class Main {
 					case 9: 
 						sortClubsByField();
 						break;
-						
+					
 					//SORT CLIENTS IN A CLUB BY A FIELD
 					case 10: 
+						sortClientsByField();
+						break;
+						
+					//SORT A CLIENTS PETS FROM A CLUB BY A FIELD
+					case 11: 
+						//TODO
+						break;
+					
+					//SEARCH A CLUB BY A GIVEN FIELD
+					case 12: 
+						searchClubByField();
+						break;
+						
+					//SEARCH A CLIENT IN A CLUB BY A GIVEN FIELD
+					case 13: 
+						sortClientsByField();
+						break;
+						
+					//SEARCH A PET FROM A CLIENT IN A CLUB BY A GIVEN FIELD
+					case 14: 
 						sortClientsByField();
 						break;
 						
@@ -180,6 +200,55 @@ public class Main {
 		
 	}
 		
+	private void searchClubByField() {
+		System.out.println("Please select a field in order to search a club by it:");
+		System.out.println("1. ID");
+		System.out.println("2. Name");
+		System.out.println("3. Issue date (newest to oldest)");
+		System.out.println("4. Type of pet");
+		System.out.println();
+		
+		int selection = reader.nextInt(); reader.nextLine();
+		
+		
+		if (selection>= 1 && selection<=4 ) {
+			if (selection== 3) {
+				System.out.print("Please type the issue date with - between numbers(dd-mm-yyyy)"); String date = reader.nextLine();	
+				long first = System.nanoTime();
+				
+				Club c = investor.findClubBinary(selection, date);
+				System.out.println(c.toString());
+				long second = System.nanoTime();
+				long finalT = second - first;
+				System.out.println("Time for binary search in nanoseconds: "+finalT);
+					
+			}else {
+			System.out.println("Please type the ID/Name/Type of pet: "); String stuff = reader.nextLine();
+			long first = System.nanoTime();
+			
+			Club c = investor.findClubBinary(selection, stuff);
+			if (c != null) {
+				System.out.println(c.toString());
+				long second = System.nanoTime();
+				long finalT = second - first;
+				System.out.println("Time for binary search in nanoseconds: "+finalT);
+				
+			} else {
+				System.out.println("");
+				System.out.println("ERROR: Club not found");
+				System.out.println("");
+				}
+			
+			}
+		} else {
+			System.out.println("");
+			System.out.println("ERROR: Invalid selection");
+			System.out.println("");
+			}
+		
+		
+	}
+
 	public void sortClientsByField() {
 		System.out.print("Please type the club's ID in order to sort its clients: "); String id = reader.nextLine();
 		System.out.println("");

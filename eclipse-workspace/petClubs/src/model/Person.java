@@ -187,8 +187,9 @@ public int compareLastName(Person person1, Person person2) {
 		ArrayList<Pet> sortedByID = sortPetsById(); //- 2 +
 		int begin = 0;
 		int end = sortedByID.size() -1;
-		int medium = (begin+end)/2;
+		
 		while (begin <= end && stop == null) {
+			int medium = (begin+end)/2;
 			String id2Evaluate = sortedByID.get(medium).getId();
 			if(id2Evaluate.equalsIgnoreCase(person)) {
 				stop = sortedByID.get(medium); 
@@ -223,8 +224,9 @@ public int compareLastName(Person person1, Person person2) {
 		ArrayList<Pet> sortedByName = sortPetsByName(); //- 2 +
 		int begin = 0;
 		int end = sortedByName.size() -1;
-		int medium = (begin+end)/2;
+		
 		while (begin <= end && stop == null) {
+			int medium = (begin+end)/2;
 			String name2Evaluate = sortedByName.get(medium).getName();
 			if(name2Evaluate.equalsIgnoreCase(name)) {
 				stop = sortedByName.get(medium); 
@@ -331,7 +333,17 @@ public int compareLastName(Person person1, Person person2) {
         
 		return value;
 	}
-
+	
+	public String toString() {
+		String me = "\n";
+		me += "ID: "+getId()+"\n";
+		me += "Name: "+getName()+"\n";
+		me += "Last name: "+getLastName()+"\n";
+		me += "Birth date: "+date2String()+"\n";
+		me += "Type of pet: "+getFavTypePet()+"\n";
+		me += "\n";
+		return me;
+	}
 
 	
 	

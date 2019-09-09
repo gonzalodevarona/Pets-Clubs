@@ -465,6 +465,74 @@ public class Investor {
 		return club.convertSortedClients2String(i);
 	}
 	
+	public Club findClubBinary(int i, String thing) {
+		
+		ArrayList<Club> sorted = null; //- 2 +
+		switch (i) {
+		case 1:
+			sorted = sortClubsById();
+			
+			break;
+		case 2:
+			sorted = sortClubsByName();		
+			break;
+					
+		case 3:
+			sorted = sortClubsByDate();
+			break;
+			
+		case 4:
+			sorted = sortClubsByType();
+			break;
+
+		default:
+			break;
+		}
+		
+		int begin = 0;
+		int end = sorted.size() -1;
+		Club stop = null;
+		while (begin <= end && stop == null) {
+			int medium = (begin+end)/2;
+			String evaluation = "";
+			switch (i) {
+			case 1:
+				 evaluation = sorted.get(medium).getId();
+				
+				break;
+			case 2:
+				 evaluation = sorted.get(medium).getName();
+				break;
+						
+			case 3:
+				evaluation = sorted.get(medium).date2String();
+				break;
+				
+			case 4:
+				evaluation = sorted.get(medium).getTypeOfPet();
+				break;
+			
+		
+
+			default:
+				break;
+			}
+			
+			
+			if(evaluation.equalsIgnoreCase(thing)) {
+				stop = sorted.get(medium); 
+			} else if(thing.compareTo(evaluation)>0) {
+				begin = medium +1;
+			} else {
+				end = medium -1;
+			}
+		}
+		
+		return stop;
+	}
+	
+	
+	
 	
 
 	

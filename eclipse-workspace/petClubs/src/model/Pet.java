@@ -13,6 +13,7 @@ package model;
 
 
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Comparator;
 import java.util.GregorianCalendar;
 
@@ -117,6 +118,28 @@ public class Pet implements Serializable, Comparable<Pet>, Comparator<Pet> {
     	}
         return value;
 		
+	}
+	
+	public String date2String() {
+		Calendar date = getBirthDate();
+		int month = date.get(Calendar.MONTH) +1;
+		int day = date.get(Calendar.DATE);
+		int year = date.get(Calendar.YEAR);
+		String dates = day+"-"+month+"-"+year;
+		
+		return dates;
+	}
+	
+	public String toString() {
+		String me = "\n";
+		me += "ID: "+getId()+"\n";
+		me += "Name: "+getName()+"\n";
+		me += "Birth date: "+date2String()+"\n";
+		me += "Type of pet: "+getType()+"\n";
+		me += "Gender: "+getGender()+"\n";
+		me += "Owner's name: "+getOwner().getName()+"\n";
+		me += "\n";
+		return me;
 	}
 
 	
