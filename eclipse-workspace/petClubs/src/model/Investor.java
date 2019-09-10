@@ -532,6 +532,11 @@ public class Investor {
 	}
 	
 	
+	public String convertSortedPets2String(int i, Club club, Person person) {
+		return club.convertSortedPets2String(i, person);
+	}
+	
+	
 	
 	
 

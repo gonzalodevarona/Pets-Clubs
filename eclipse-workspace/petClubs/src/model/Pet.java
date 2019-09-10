@@ -30,7 +30,7 @@ public class Pet implements Serializable, Comparable<Pet>, Comparator<Pet> {
 	public final static String FERRET = "Ferret";
 	public final static char MALE = 'M';
 	public final static char FEMALE = 'F';
-	public final static String PETSCSV = "data/Pets.csv";
+	public final static String PETSCSV = "dataTest/Pets.csv";
 	
 	
 	//ATTRIBUTES
@@ -96,17 +96,61 @@ public class Pet implements Serializable, Comparable<Pet>, Comparator<Pet> {
 	public int compare(Pet pet1, Pet pet2) {
 			
 		int value = 0;
-		String pet1ID = pet1.getId();
-		String pet2ID = pet2.getId();
-    	if(pet1ID.compareTo(pet2ID) >0){
+		int pet1ID = Integer.parseInt(pet1.getId());
+		int pet2ID = Integer.parseInt(pet2.getId());
+    	if(pet1ID>pet2ID){
     		value = 1;
-    	}else if(pet1ID.compareTo(pet2ID) <0){
+    	}else if(pet1ID<pet2ID){
     		value = -1;
     	} 
         
 		return value;
 			
 	 }
+	
+	public int compareType(Pet pet1, Pet pet2) {
+		
+		int value = 0;
+		String pet1Type = pet1.getType();
+		String pet2Type = pet2.getType();
+    	if(pet1Type.compareTo(pet2Type) >0){
+    		value = 1;
+    	}else if(pet1Type.compareTo(pet2Type) <0){
+    		value = -1;
+    	} 
+        
+		return value;
+			
+	 }
+	
+	public int compareGender(Pet pet1, Pet pet2) {
+		
+		int value = 0;
+		char pet1Gender = pet1.getGender();
+		char pet2Gender = pet2.getGender();
+    	if(pet1Gender > pet2Gender) {
+    		value = 1;
+    	}else if(pet1Gender < pet2Gender){
+    		value = -1;
+    	} 
+        
+		return value;
+			
+	 }
+	
+	
+	public int compareDate(Pet pet1, Pet pet2) {
+		int value = 0;
+		GregorianCalendar pet1Date = pet1.getBirthDate();
+		GregorianCalendar pet2Date = pet2.getBirthDate();
+    	if(pet1Date.compareTo(pet2Date) >0){
+    		value = 1;
+    	}else if(pet1Date.compareTo(pet2Date) <0){
+    		value = -1;
+    	} 
+        
+		return value;
+	}
 
 	public int compareTo(Pet pet) {
 		int value = 0;

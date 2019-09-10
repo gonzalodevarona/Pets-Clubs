@@ -28,7 +28,7 @@ import java.util.GregorianCalendar;
 
 public class Person implements Serializable, Comparable<Person>, Comparator<Person> {
 	
-	public final static String PEOPLECSV = "data/People.csv";
+	public final static String PEOPLECSV = "dataTest/People.csv";
 	
 	private String id;
 	private String name;
@@ -140,11 +140,11 @@ public class Person implements Serializable, Comparable<Person>, Comparator<Pers
 	public int compare(Person person1, Person person2) {
 			
 		int value = 0;
-		String person1ID = person1.getId();
-		String person2ID = person2.getId();
-    	if(person1ID.compareTo(person2ID) >0){
+		int person1ID = Integer.parseInt(person1.getId());
+		int person2ID = Integer.parseInt(person2.getId());
+    	if(person1ID>person2ID){
     		value = 1;
-    	}else if(person1ID.compareTo(person2ID) <0){
+    	}else if(person1ID<person2ID){
     		value = -1;
     	} 
         
@@ -202,6 +202,40 @@ public int compareLastName(Person person1, Person person2) {
 		
 		return stop;
 	}
+	
+	public ArrayList<Pet> sortPetsByGender(){
+		ArrayList<Pet> sorted = getPets();
+		for (int i = 1; i < sorted.size(); i++) {
+			for (int j = i; j > 0; j--) {
+				
+				if (sorted.get(j).compareGender(sorted.get(j), sorted.get(j-1)) < 0) {
+					Pet temp = sorted.get(j);
+					sorted.set(j, sorted.get(j-1)) ;
+					sorted.set(j-1, temp) ;
+				} 
+			}
+		}
+		
+		return sorted;
+	}
+	
+	
+	public ArrayList<Pet> sortPetsByType(){
+		ArrayList<Pet> sorted = getPets();
+		for (int i = 1; i < sorted.size(); i++) {
+			for (int j = i; j > 0; j--) {
+				
+				if (sorted.get(j).compareType(sorted.get(j), sorted.get(j-1)) < 0) {
+					Pet temp = sorted.get(j);
+					sorted.set(j, sorted.get(j-1)) ;
+					sorted.set(j-1, temp) ;
+				} 
+			}
+		}
+		
+		return sorted;
+	}
+	
 	
 	public ArrayList<Pet> sortPetsById(){
 		ArrayList<Pet> sorted = getPets();
@@ -343,6 +377,86 @@ public int compareLastName(Person person1, Person person2) {
 		me += "Type of pet: "+getFavTypePet()+"\n";
 		me += "\n";
 		return me;
+	}
+	
+	public String convertSortedPets2String(int i) {
+		String bigOne = "\n";
+		ArrayList<Pet> printThis = getPets();
+		switch (i) {
+		case 1:
+			printThis = sortPetsById();
+			
+			break;
+		case 2:
+			printThis = sortPetsByName();		
+			break;
+					
+		case 3:
+			printThis = sortPetsByDate();	
+			break;
+			
+		case 4:
+			printThis = sortPetsByGender();
+			break;
+		case 5:
+			printThis = sortPetsByType();
+			break;
+		
+	
+
+		default:
+			break;
+		}
+		
+		for (int j = 0; j < printThis.size(); j++) {
+			bigOne += printThis.get(j).getName();
+			switch (i) {
+			case 1:
+				bigOne += " - "+printThis.get(j).getId()+"\n";
+				break;
+			
+			case 2:
+				bigOne += "\n";
+				break;
+			
+			case 3:
+				bigOne += " - "+printThis.get(j).date2String()+"\n";
+				break;
+				
+			case 4:
+				bigOne += " - "+printThis.get(j).getGender()+"\n";
+				break;
+			case 5:
+				bigOne += " - "+printThis.get(j).getType()+"\n";
+				break;
+
+			default:
+				break;
+			}
+		}
+		
+		
+		return bigOne;
+	}
+
+	
+
+	public ArrayList<Pet> sortPetsByDate() {
+		
+		ArrayList<Pet> sorted = getPets();
+		for (int i = 1; i < sorted.size(); i++) {
+			for (int j = i; j > 0; j--) {
+				
+				if (sorted.get(j).compareDate(sorted.get(j), sorted.get(j-1)) < 0) {
+					Pet temp = sorted.get(j);
+					sorted.set(j, sorted.get(j-1)) ;
+					sorted.set(j-1, temp) ;
+				} 
+			}
+		}
+		
+		return sorted;
+	
 	}
 
 	

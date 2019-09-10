@@ -26,7 +26,7 @@ import java.util.GregorianCalendar;
 
 public class Club implements Comparable<Club>, Comparator<Club> {
 	
-	public final static String CLUBSCSV = "data/Clubs.csv";
+	public final static String CLUBSCSV = "dataTest/Clubs.csv";
 	
 	private String id;
 	private String name;
@@ -39,7 +39,7 @@ public class Club implements Comparable<Club>, Comparator<Club> {
 		super();
 		this.id = id;
 		this.name = name;
-		this.issueDate = issueDate;
+		this.issueDate = issueDate; 
 		typeOfPet = "NOTHING";
 		clients = new ArrayList<Person>();
 	}
@@ -336,11 +336,12 @@ public class Club implements Comparable<Club>, Comparator<Club> {
 	@Override
 	public int compare(Club club1, Club club2) {
 		int value = 0;
-		String club1ID = club1.getId();
-		String club2ID = club2.getId();
-    	if(club1ID.compareTo(club2ID) >0){
+		
+		int club1ID = Integer.parseInt(club1.getId());
+		int club2ID = Integer.parseInt(club2.getId());
+    	if(club1ID >club2ID){
     		value = 1;
-    	}else if(club1ID.compareTo(club2ID) <0){
+    	}else if(club1ID <club2ID){
     		value = -1;
     	} 
         
@@ -457,6 +458,8 @@ public class Club implements Comparable<Club>, Comparator<Club> {
 		
 		return bigOne;
 	}
+	
+	
 
 
 	public ArrayList<Person> sortClientsByLastName() {
@@ -486,6 +489,9 @@ public class Club implements Comparable<Club>, Comparator<Club> {
 	}
 
 	
+	public String convertSortedPets2String(int i, Person person) {
+		return person.convertSortedPets2String(i);
+	}
 	
 	
 

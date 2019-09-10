@@ -37,10 +37,7 @@ public class Main {
 	public static void main(String[] args) {
 		Main execute = new Main();
 		execute.menu();
-		
-		
-		
-		
+	
 	}
 	
 	public void showMenuOptions(){
@@ -73,8 +70,8 @@ public class Main {
 		
 		try {
 			investor.loadClubsPlainText();
-//			investor.loadPeoplePlainText();
-//			investor.loadPetsPlainText();
+			investor.loadPeoplePlainText();
+			investor.loadPetsPlainText();
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -159,7 +156,7 @@ public class Main {
 						
 					//SORT A CLIENTS PETS FROM A CLUB BY A FIELD
 					case 11: 
-						//TODO
+						sortPetsByField();
 						break;
 					
 					//SEARCH A CLUB BY A GIVEN FIELD
@@ -200,7 +197,10 @@ public class Main {
 		
 	}
 		
-	private void searchClubByField() {
+	
+	
+
+	public void searchClubByField() {
 		System.out.println("Please select a field in order to search a club by it:");
 		System.out.println("1. ID");
 		System.out.println("2. Name");
@@ -248,6 +248,57 @@ public class Main {
 		
 		
 	}
+	
+	public void sortPetsByField() {
+		System.out.print("Please type the club's ID in order to sort its clients: "); String id = reader.nextLine();
+		System.out.println("");
+		Club myClub = investor.findClub(id);
+		if (myClub != null) {
+			
+			
+			System.out.print("Please type the owner's ID:"); String idOwner = reader.nextLine();
+			Person p = myClub.findPersonBinary(idOwner);
+			if (p != null) {
+				
+				System.out.println("Please select a field in order to sort all pets by it:");
+				System.out.println("1. ID");
+				System.out.println("2. Name");
+				System.out.println("3. Birth date (youngest to oldest)");
+				System.out.println("4. Gender");
+				System.out.println("5. Type of pet");
+				System.out.println("note: every field is sorted upwards except issue date");
+				System.out.println();
+				
+				int selection = reader.nextInt(); reader.nextLine();
+				
+				
+				if (selection>= 1 && selection<=5 ) {
+					System.out.println(investor.convertSortedPets2String( selection,  myClub, p));
+					System.out.println();
+					
+				} else {
+					System.out.println("");
+					System.out.println("ERROR: Invalid selection");
+					System.out.println("");
+					}
+				
+				
+			} else {
+				System.out.println("");
+				System.out.println("ERROR: Client not found.");
+				System.out.println("");
+			}
+			 	
+			
+		} else {
+			System.out.println("");
+			System.out.println("ERROR: Club not found");
+			System.out.println("");
+			}	
+	}
+	
+	
+	
 
 	public void sortClientsByField() {
 		System.out.print("Please type the club's ID in order to sort its clients: "); String id = reader.nextLine();
