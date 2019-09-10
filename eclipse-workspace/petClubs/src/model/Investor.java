@@ -119,7 +119,8 @@ public class Investor {
 		while (line != null) {
 			words = line.split(";");
 			
-			String idP = words[0];
+			//System.out.println("'"+words[0].length()+"'");
+			int idP = parseInt(words[0]);
 			String nameP = words[1];
 			String lastNameP = words[2];
 			String favTypePetP = words[4];
@@ -153,6 +154,24 @@ public class Investor {
 		
 	}
 	
+	private static int parseInt(String number) {
+		return Integer.parseInt(cleanTextContent(number));
+	}
+	
+	private static String cleanTextContent(String text) 
+	{
+		// strips off all non-ASCII characters
+		text = text.replaceAll("[^\\x00-\\x7F]", "");
+
+		// erases all the ASCII control characters
+		text = text.replaceAll("[\\p{Cntrl}&&[^\r\n\t]]", "");
+		
+		// removes non-printable characters from Unicode
+		text = text.replaceAll("\\p{C}", "");
+
+		return text.trim();
+	}
+	
 	public ArrayList<Pet> convertPetsPlainText2ArrayList() throws FileNotFoundException, IOException {
 		ArrayList<Pet> pets = new ArrayList<Pet>();
 		
@@ -169,7 +188,7 @@ public class Investor {
 		while (line != null) {
 			words = line.split(";");
 			
-			String idP = words[0];
+			int idP = (parseInt(words[0]));
 			String nameP = words[1];
 			char gender = words[3].charAt(0);
 			String type = words[4];
@@ -238,17 +257,18 @@ public class Investor {
 		return everybody;
 	}
 	
-	public boolean isThereAClientDoppelganger(String id) {
+	public boolean isThereAClientDoppelganger(int id) {
 		boolean stop = false;
 		ArrayList<Person> sortedByName = sortByClientsById();
 		int begin = 0;
 		int end = sortedByName.size() -1;
-		int medium = (begin+end)/2;
+		
 		while (begin <= end && !stop) {
-			String id2Evaluate = sortedByName.get(medium).getId();
-			if(id2Evaluate.equalsIgnoreCase(id)) {
+			int medium = (begin+end)/2;
+			int id2Evaluate = sortedByName.get(medium).getId();
+			if(id2Evaluate==id) {
 				stop = true; 
-			} else if(id.compareTo(id2Evaluate)>0) {
+			} else if(id>id2Evaluate) {
 				begin = medium +1;
 			} else {
 				end = medium -1;

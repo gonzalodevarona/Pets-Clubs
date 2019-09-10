@@ -30,7 +30,7 @@ public class Person implements Serializable, Comparable<Person>, Comparator<Pers
 	
 	public final static String PEOPLECSV = "dataTest/People.csv";
 	
-	private String id;
+	private int id;
 	private String name;
 	private String lastName;
 	private GregorianCalendar birthDate;
@@ -41,7 +41,7 @@ public class Person implements Serializable, Comparable<Person>, Comparator<Pers
 	
 	
 	
-	public Person(String id, String name, String lastName, GregorianCalendar birthDate, String favTypePet) {
+	public Person(int id, String name, String lastName, GregorianCalendar birthDate, String favTypePet) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -52,10 +52,10 @@ public class Person implements Serializable, Comparable<Person>, Comparator<Pers
 	}
 	
 	
-	public String getId() {
+	public int getId() {
 		return id;
 	}
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 	public String getName() {
@@ -138,10 +138,10 @@ public class Person implements Serializable, Comparable<Person>, Comparator<Pers
 
 	@Override
 	public int compare(Person person1, Person person2) {
-			
+					
 		int value = 0;
-		int person1ID = Integer.parseInt(person1.getId());
-		int person2ID = Integer.parseInt(person2.getId());
+		int person1ID = person1.getId();
+		int person2ID = person2.getId();
     	if(person1ID>person2ID){
     		value = 1;
     	}else if(person1ID<person2ID){
@@ -151,6 +151,7 @@ public class Person implements Serializable, Comparable<Person>, Comparator<Pers
 		return value;
 			
 	 }
+	
 	
 	public int compareName(Person person1, Person person2) {
 		
@@ -182,7 +183,7 @@ public int compareLastName(Person person1, Person person2) {
 			
 	 }
 	
-	public Pet findPetBinary(String person) {
+	public Pet findPetBinary(int person) {
 		Pet stop = null;
 		ArrayList<Pet> sortedByID = sortPetsById(); //- 2 +
 		int begin = 0;
@@ -190,10 +191,10 @@ public int compareLastName(Person person1, Person person2) {
 		
 		while (begin <= end && stop == null) {
 			int medium = (begin+end)/2;
-			String id2Evaluate = sortedByID.get(medium).getId();
-			if(id2Evaluate.equalsIgnoreCase(person)) {
+			int id2Evaluate = sortedByID.get(medium).getId();
+			if(id2Evaluate==person) {
 				stop = sortedByID.get(medium); 
-			} else if(id.compareTo(id2Evaluate)>0) {
+			} else if(id > id2Evaluate) {
 				begin = medium +1;
 			} else {
 				end = medium -1;
@@ -319,10 +320,10 @@ public int compareLastName(Person person1, Person person2) {
 
 
 
-	public boolean isThereADoppelganger(String nameP, String idp) {
+	public boolean isThereADoppelganger(String nameP, int idp) {
 		boolean stop = false;
 		for (int i = 0; i < pets.size() && !stop; i++) {
-			if (pets.get(i).getName().equalsIgnoreCase(nameP) || pets.get(i).getId().equalsIgnoreCase(idp)) {
+			if (pets.get(i).getName().equalsIgnoreCase(nameP) || pets.get(i).getId()==idp) {
 				stop = true;
 			}
 		}
@@ -334,9 +335,9 @@ public int compareLastName(Person person1, Person person2) {
 		int value = 0;
 		GregorianCalendar person1Date = person1.getBirthDate();
 		GregorianCalendar person2Date = person2.getBirthDate();
-    	if(person1Date.compareTo(person2Date) >0){
+    	if(person1Date.after(person2Date)){
     		value = 1;
-    	}else if(person1Date.compareTo(person2Date) <0){
+    	}else if(person1Date.after(person2Date)){
     		value = -1;
     	} 
         

@@ -222,7 +222,7 @@ public class Club implements Comparable<Club>, Comparator<Club> {
 		
 	}
 	
-	public Person findPersonBinary(String person) {
+	public Person findPersonBinary(int person) {
 		Person stop = null;
 		ArrayList<Person> sortedByID = sortClientsById(); //- 2 +
 		int begin = 0;
@@ -230,10 +230,10 @@ public class Club implements Comparable<Club>, Comparator<Club> {
 		
 		while (begin <= end && stop == null) {
 			int medium = (begin+end)/2;
-			String id2Evaluate = sortedByID.get(medium).getId();
-			if(id2Evaluate.equalsIgnoreCase(person)) {
+			int id2Evaluate = sortedByID.get(medium).getId();
+			if(id2Evaluate==person) {
 				stop = sortedByID.get(medium); 
-			} else if(id.compareTo(id2Evaluate)>0) {
+			} else if(person>id2Evaluate) {
 				begin = medium +1;
 			} else {
 				end = medium -1;
@@ -390,9 +390,9 @@ public class Club implements Comparable<Club>, Comparator<Club> {
 		int value = 0;
 		GregorianCalendar club1Date = club1.getIssueDate();
 		GregorianCalendar club2Date = club2.getIssueDate();
-    	if(club1Date.compareTo(club2Date) >0){
+    	if(club1Date.after(club2Date) ){
     		value = 1;
-    	}else if(club1Date.compareTo(club1Date) <0){
+    	}else if(club1Date.after(club1Date)){
     		value = -1;
     	} 
         

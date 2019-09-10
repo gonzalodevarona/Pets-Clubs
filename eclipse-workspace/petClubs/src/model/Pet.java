@@ -34,7 +34,7 @@ public class Pet implements Serializable, Comparable<Pet>, Comparator<Pet> {
 	
 	
 	//ATTRIBUTES
-	private String id;
+	private int id;
 	private String name;
 	private GregorianCalendar birthDate;
 	private char gender;
@@ -45,7 +45,7 @@ public class Pet implements Serializable, Comparable<Pet>, Comparator<Pet> {
 	
 	
 	
-	public Pet(String id, String name, GregorianCalendar birthDate, char gender, String type, Person owner) {
+	public Pet(int id, String name, GregorianCalendar birthDate, char gender, String type, Person owner) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -55,10 +55,10 @@ public class Pet implements Serializable, Comparable<Pet>, Comparator<Pet> {
 		this.owner = owner;
 	}
 
-	public String getId() {
+	public int getId() {
 		return id;
 	}
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 	public String getName() {
@@ -96,9 +96,9 @@ public class Pet implements Serializable, Comparable<Pet>, Comparator<Pet> {
 	public int compare(Pet pet1, Pet pet2) {
 			
 		int value = 0;
-		int pet1ID = Integer.parseInt(pet1.getId());
-		int pet2ID = Integer.parseInt(pet2.getId());
-    	if(pet1ID>pet2ID){
+		int pet1ID = pet1.getId();
+		int pet2ID = pet2.getId();
+    	if(pet1ID>pet2ID){ 
     		value = 1;
     	}else if(pet1ID<pet2ID){
     		value = -1;
@@ -143,11 +143,11 @@ public class Pet implements Serializable, Comparable<Pet>, Comparator<Pet> {
 		int value = 0;
 		GregorianCalendar pet1Date = pet1.getBirthDate();
 		GregorianCalendar pet2Date = pet2.getBirthDate();
-    	if(pet1Date.compareTo(pet2Date) >0){
+    	if(pet1Date.after(pet2Date)){
     		value = 1;
-    	}else if(pet1Date.compareTo(pet2Date) <0){
+    	}else if(pet1Date.after(pet2Date)){
     		value = -1;
-    	} 
+    	}
         
 		return value;
 	}

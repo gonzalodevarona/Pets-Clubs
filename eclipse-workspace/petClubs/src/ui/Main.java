@@ -256,7 +256,7 @@ public class Main {
 		if (myClub != null) {
 			
 			
-			System.out.print("Please type the owner's ID:"); String idOwner = reader.nextLine();
+			System.out.print("Please type the owner's ID:"); int idOwner = reader.nextInt(); reader.nextLine();
 			Person p = myClub.findPersonBinary(idOwner);
 			if (p != null) {
 				
@@ -393,7 +393,7 @@ public class Main {
 					
 				if (myClub != null) {
 					
-							System.out.print("Please type the client's ID: "); String idP = reader.nextLine();
+							System.out.print("Please type the client's ID: "); int idP = reader.nextInt(); reader.nextLine();
 							Person person = myClub.findPersonBinary(idP);
 						
 							
@@ -408,7 +408,7 @@ public class Main {
 							
 							if (selection ==1 || selection ==2 ) {
 								if (selection ==1) {
-									System.out.print("Please type the pet's ID: "); String idp = reader.nextLine();
+									System.out.print("Please type the pet's ID: "); int idp = reader.nextInt(); reader.nextLine();
 									pet = person.findPetBinary(idp);
 									
 								} else {
@@ -449,7 +449,9 @@ public class Main {
 			 
 			
 		} catch (InputMismatchException e) {
+			System.out.println("");
 			System.out.println("ERROR: Wrong data type.");
+			System.out.println("");
 		}
 	
 	}
@@ -479,7 +481,7 @@ public class Main {
 						
 						if (selection ==1 || selection ==2 ) {
 							if (selection ==1) {
-								System.out.print("Please type the client's ID: "); String idP = reader.nextLine();
+								System.out.print("Please type the client's ID: "); int idP = reader.nextInt(); reader.nextLine();
 								person = myClub.findPersonBinary(idP);
 								if (person != null) {
 									myClub.removeOneObjectPerson(person);
@@ -527,7 +529,9 @@ public class Main {
 				 
 				
 			} catch (InputMismatchException e) {
+				System.out.println("");
 				System.out.println("ERROR: Wrong data type.");
+				System.out.println("");
 			}
 		
 		}
@@ -583,7 +587,9 @@ public class Main {
 				
 				
 			} catch (InputMismatchException e) {
+				System.out.println("");
 				System.out.println("ERROR: Wrong data type.");
+				System.out.println("");
 			}
 		
 		}
@@ -593,7 +599,8 @@ public class Main {
 				System.out.println("REGISTER PET (every client must have at least one pet to be in a club)");
 				System.out.println("");
 				System.out.println("");
-				System.out.print("Please type the pet's ID: "); String idp = reader.nextLine();
+				System.out.print("Please type the pet's ID: "); int id = reader.nextInt(); reader.nextLine();
+				
 				System.out.print("Please type the pet's name: "); String nameP = reader.nextLine();
 			
 				System.out.print("Please write the pet's type: "); String typeP = reader.nextLine();
@@ -620,8 +627,8 @@ public class Main {
 					if(birthDateP.compareTo(now) <= 0 && yearP>=1970) {
 						if (person != null) {
 							
-							if (person.isThereADoppelganger(nameP, idp) == false) {
-								Pet pet = new Pet(idp, nameP, birthDateP, gender, typeP, person);
+							if (person.isThereADoppelganger(nameP, id) == false) {
+								Pet pet = new Pet(id, nameP, birthDateP, gender, typeP, person);
 								person.addPet(pet);
 								System.out.println("Sucessfully added "+pet.getName()+" to "+person.getName());
 							} else {
@@ -633,11 +640,11 @@ public class Main {
 							String idClub = reader.nextLine();
 							Club mainC = investor.findClub(idClub);
 							if (mainC != null) {
-								System.out.print("Please type the owner's ID:"); String idOwner = reader.nextLine();
+								System.out.print("Please type the owner's ID:"); int idOwner = reader.nextInt(); reader.nextLine();
 								Person p = mainC.findPersonBinary(idOwner);
 								if (p != null) {
-									if (p.isThereADoppelganger(nameP, idp) == false) {
-										Pet pet = new Pet(idp, nameP, birthDateP, gender, typeP, p);
+									if (p.isThereADoppelganger(nameP, id) == false) {
+										Pet pet = new Pet(id, nameP, birthDateP, gender, typeP, p);
 										p.addPet(pet);
 										System.out.println("Sucessfully added "+pet.getName()+" to "+p.getName());
 									} else {
@@ -668,7 +675,9 @@ public class Main {
 				
 					
 			} catch (InputMismatchException e) {
+				System.out.println("");
 				System.out.println("ERROR: Wrong data type.");
+				System.out.println("");
 			}
 				
 				
@@ -686,7 +695,7 @@ public class Main {
 				System.out.println("");
 				Club myClub = investor.findClub(id);
 				if (myClub != null) {
-					System.out.print("Please type the new client's ID: "); String idP = reader.nextLine();
+					System.out.print("Please type the new client's ID: "); int idP = reader.nextInt(); reader.nextLine();
 					
 					if(investor.isThereAClientDoppelganger(idP) == false) {
 						System.out.print("Please type the new client's name: "); String name = reader.nextLine();
@@ -718,19 +727,32 @@ public class Main {
 								
 										
 						} else {
+							System.out.println("");
 							System.out.println("ERROR: Invalid birth date.");
+							System.out.println("");
 							
-											}
+						}
 					} else {
+						System.out.println("");
 						System.out.println("ERROR: One client cannot be in two clubs.");
+						System.out.println("");
 		
 						}
 				} else {
+					System.out.println("");
 					System.out.println("ERROR: Club not found.");
+					System.out.println("");
 					} 
 				
 			} catch (InputMismatchException e) {
+				System.out.println("");
 				System.out.println("ERROR: Wrong data type.");
+				System.out.println("");
+				
+			} catch (NumberFormatException e) {
+				System.out.println("");
+				System.out.println("ERROR: Wrong data type.");
+				System.out.println("");
 			}
 		}
 			
@@ -741,7 +763,8 @@ public class Main {
 			try {
 			 	System.out.println("");
 				System.out.print("Please type the club's name: "); String name = reader.nextLine();
-				System.out.print("Please type the club's ID: "); String id = reader.nextLine();
+				System.out.print("Please type the club's ID: "); int idInt = reader.nextInt(); reader.nextLine();
+				String id = Integer.toString(idInt);
 				System.out.println("");
 				System.out.print("Please type the club's issue day: "); int day = reader.nextInt(); reader.nextLine();
 				System.out.print("Please type the club's issue month: "); int month = reader.nextInt(); reader.nextLine();
@@ -775,7 +798,9 @@ public class Main {
 				  		System.out.println("");
 				}
 			} catch (InputMismatchException e) {
+				System.out.println("");
 				System.out.println("ERROR: Wrong data type.");
+				System.out.println("");
 			}
 		 }
 
