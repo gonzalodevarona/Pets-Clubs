@@ -127,22 +127,6 @@ public class Club implements Comparable<Club>, Comparator<Club> {
 		return x;
 	} 
 	
-	public void saveChangesPets() throws FileNotFoundException, IOException {
-		for (int i = 0; i < clients.size(); i++) {
-			clients.get(i).saveChanges();
-			
-		}
-			
-		
-	}
-	
-	public void loadChangesPets() throws FileNotFoundException, IOException, ClassNotFoundException {
-		for (int i = 0; i < clients.size(); i++) {
-			clients.get(i).loadChanges();
-			
-		}
-		
-	}
 	
 	
 	public void saveChanges() throws FileNotFoundException, IOException {
@@ -171,50 +155,63 @@ public class Club implements Comparable<Club>, Comparator<Club> {
 	
 	public void assignType4Club() {
 
-		int[] arrayNumb = new int[6];
-		arrayNumb[0] = 0 ;
-		arrayNumb[1] = 0 ;
-		arrayNumb[2] = 0 ;
-		arrayNumb[3] = 0 ;
-		arrayNumb[4] = 0 ;
-		arrayNumb[5] = howManyPetsInTheClub() ;
+		
+		int bird = 0;
+		int dog = 0;
+		int cat = 0;
+		int ferret = 0;
+		int hamster = 0;
+		int other = howManyPetsInTheClub() ;
+		
 		
 		for (int i = 0; i < clients.size(); i++) {
-			arrayNumb[0] += clients.get(i).howManyOfEachType(Pet.BIRD);
-			arrayNumb[1] += clients.get(i).howManyOfEachType(Pet.DOG);
-			arrayNumb[2] += clients.get(i).howManyOfEachType(Pet.CAT);
-			arrayNumb[3] += clients.get(i).howManyOfEachType(Pet.FERRET);
-			arrayNumb[4] += clients.get(i).howManyOfEachType(Pet.HAMSTER);
+			bird += clients.get(i).howManyOfEachType(Pet.BIRD);
+			dog += clients.get(i).howManyOfEachType(Pet.DOG);
+			cat += clients.get(i).howManyOfEachType(Pet.CAT);
+			ferret += clients.get(i).howManyOfEachType(Pet.FERRET);
+			hamster += clients.get(i).howManyOfEachType(Pet.HAMSTER);
 
 		}
+		int all = bird + dog + cat + ferret + hamster;
+		other = other - all;
 		
-		arrayNumb[5] = arrayNumb[5] - (arrayNumb[0]+arrayNumb[1]+arrayNumb[2]+arrayNumb[3]+arrayNumb[4]);
-		
-		int highest = arrayNumb[0];
+		int highest = bird;
 		String who = "";
-		for (int i = 0; i < arrayNumb.length; i++) {
-			if (highest<arrayNumb[i]) {
-				highest = arrayNumb[i];
+		int[] arrayPets = new int[6];
+		
+		arrayPets[0] = bird;
+		arrayPets[1] = dog;
+		arrayPets[2] = cat;
+		arrayPets[3] = ferret;
+		arrayPets[4] = hamster;
+		arrayPets[5] = other;
+	
+		int position = 0;
+		for (int i = 0; i < arrayPets.length; i++) {
+			if (highest < arrayPets[i]) {
+				highest = arrayPets[i];
+				position = i;
 			}
-			switch (i) {
-			case 0: who = Pet.BIRD;
-				break;
+		}
+		
+		switch (position) {
+		case 0: who = Pet.BIRD;
+			break;
 
-			case 1: who = Pet.DOG;
-				break;
+		case 1: who = Pet.DOG;
+			break;
+		
+		case 2: who = Pet.CAT;
+			break;
 			
-			case 2: who = Pet.CAT;
-				break;
-				
-			case 3: who = Pet.FERRET;
-				break;
-				
-			case 4: who = Pet.HAMSTER;
-				break;
-				
-			case 5: who = "Other";
-				break;
-			}
+		case 3: who = Pet.FERRET;
+			break;
+			
+		case 4: who = Pet.HAMSTER;
+			break;
+			
+		case 5: who = "Other";
+			break;
 		}
 		
 		setTypeOfPet(who);
@@ -248,13 +245,14 @@ public class Club implements Comparable<Club>, Comparator<Club> {
 		ArrayList<Person> sortedByName = sortClientsByName(); //- 2 +
 		int begin = 0;
 		int end = sortedByName.size() -1;
+		person = person.toLowerCase();
 		
 		while (begin <= end && stop == null) {
 			int medium = (begin+end)/2;
-			String name2Evaluate = sortedByName.get(medium).getName();
+			String name2Evaluate =  sortedByName.get(medium).getName().toLowerCase();
 			if(name2Evaluate.equalsIgnoreCase(person)) {
 				stop = sortedByName.get(medium); 
-			} else if(id.compareTo(name2Evaluate)>0) {
+			} else if(person.compareTo(name2Evaluate)>0) {
 				begin = medium +1;
 			} else {
 				end = medium -1;
@@ -390,9 +388,9 @@ public class Club implements Comparable<Club>, Comparator<Club> {
 		int value = 0;
 		GregorianCalendar club1Date = club1.getIssueDate();
 		GregorianCalendar club2Date = club2.getIssueDate();
-    	if(club1Date.after(club2Date) ){
+    	if(club1Date.compareTo(club2Date) > 0 ){
     		value = 1;
-    	}else if(club1Date.after(club1Date)){
+    	}else if(club1Date.compareTo(club1Date) < 0){
     		value = -1;
     	} 
         
@@ -491,6 +489,117 @@ public class Club implements Comparable<Club>, Comparator<Club> {
 	
 	public String convertSortedPets2String(int i, Person person) {
 		return person.convertSortedPets2String(i);
+	}
+
+
+	
+
+
+	public Person searchPersonByOtherFields(int selection, String thing) {
+		Person p = null;
+		switch (selection) {
+
+		case 2:
+			p = findPersonBinaryName(thing);		
+			break;
+					
+		case 3:
+			p = findPersonBinaryLastName(thing);
+			break;
+			
+		case 4:
+			p = findPersonBinaryDate(thing);
+			break;
+		case 5:
+			p = findPersonBinaryType(thing);
+			break;
+		
+		default:
+			break;
+		}
+		return p;
+	}
+	
+	public Person findPersonBinaryLastName(String person) {
+		Person stop = null;
+		ArrayList<Person> sortedByLastName = sortClientsByLastName(); //- 2 +
+		int begin = 0;
+		int end = sortedByLastName.size() -1;
+		person = person.toLowerCase();
+		while (begin <= end && stop == null) {
+			int medium = (begin+end)/2;
+			String name2Evaluate = sortedByLastName.get(medium).getLastName().toLowerCase();
+			if(name2Evaluate.equalsIgnoreCase(person)) {
+				stop = sortedByLastName.get(medium); 
+			} else if(person.compareTo(name2Evaluate)>0) {
+				begin = medium +1;
+			} else {
+				end = medium -1;
+			}
+		}
+		
+		return stop;
+	}
+	
+	public Person findPersonBinaryType(String person) {
+		Person stop = null;
+		ArrayList<Person> sortedByType = sortClientsByType(); //- 2 +
+		int begin = 0;
+		int end = sortedByType.size() -1;
+		person = person.toLowerCase();
+		while (begin <= end && stop == null) {
+			int medium = (begin+end)/2;
+			String type2Evaluate = sortedByType.get(medium).getFavTypePet().toLowerCase();;
+			if(type2Evaluate.equalsIgnoreCase(person)) {
+				stop = sortedByType.get(medium); 
+			} else if(person.compareTo(type2Evaluate)>0) {
+				begin = medium +1;
+			} else {
+				end = medium -1;
+			}
+		}
+		
+		return stop;
+	}
+	
+	
+	public Person findPersonBinaryDate(String person) {
+		Person stop = null;
+		ArrayList<Person> sortedByDate = sortClientsByDate(); //- 2 +
+		int begin = 0;
+		int end = sortedByDate.size() -1;
+		
+		while (begin <= end && stop == null) {
+			int medium = (begin+end)/2;
+			String date2Evaluate = sortedByDate.get(medium).date2String();
+			if(date2Evaluate.equalsIgnoreCase(person)) {
+				stop = sortedByDate.get(medium); 
+			} else if(person.compareTo(date2Evaluate)>0) {
+				begin = medium +1;
+			} else {
+				end = medium -1;
+			}
+		}
+		
+		return stop;
+	}
+	
+	
+	public String searchPetByField(Person person, int selection, int id, String thing) {
+		String big = "ERROR: No pet found";
+		Pet p = null;
+		if (selection == 1) {
+			p = person.findPetBinary( id);
+	
+		} else {
+			p= person.searchPetByOtherFields(selection, thing);
+		}
+		
+		if (p != null) {
+			big = p.toString();
+		}
+		
+		return big;
 	}
 	
 	

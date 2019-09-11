@@ -143,9 +143,9 @@ public class Pet implements Serializable, Comparable<Pet>, Comparator<Pet> {
 		int value = 0;
 		GregorianCalendar pet1Date = pet1.getBirthDate();
 		GregorianCalendar pet2Date = pet2.getBirthDate();
-    	if(pet1Date.after(pet2Date)){
+    	if(pet1Date.compareTo(pet2Date) > 0){
     		value = 1;
-    	}else if(pet1Date.after(pet2Date)){
+    	}else if(pet1Date.compareTo(pet2Date) < 0){
     		value = -1;
     	}
         

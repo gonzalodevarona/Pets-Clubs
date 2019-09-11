@@ -158,6 +158,12 @@ public class Investor {
 		return Integer.parseInt(cleanTextContent(number));
 	}
 	
+	//I copied this method from the internet because my CSVs were having a issue with no printable characters
+	//this method is supposed to clean the csv lines in order to read them and cast Strings to int properly
+	//any inquieries about this, ask Juan Manuel Reyes, he helped me out with this.
+	//| | | |
+	//v v v v
+	
 	private static String cleanTextContent(String text) 
 	{
 		// strips off all non-ASCII characters
@@ -328,8 +334,9 @@ public class Investor {
 	public Club findClubByName(String name) {
 		Club club = null;
 		boolean stop = false;
+		name = name.toLowerCase();;
 		for (int i = 0; i < clubs.size() && !stop; i++) {
-			if (clubs.get(i).getName().equalsIgnoreCase(name)) {
+			if (clubs.get(i).getName().toLowerCase().equalsIgnoreCase(name)) {
 				club = clubs.get(i);
 				stop = true;
 			} 
@@ -344,7 +351,7 @@ public class Investor {
 	public boolean isThereADoppelgangerClub(String id) {
 		boolean stop = false;
 		for (int i = 0; i < clubs.size() && !stop; i++) {
-			if (clubs.get(i).getId().equalsIgnoreCase(id)) {
+			if (clubs.get(i).getId() ==id) {
 				stop = true;
 			}
 		}
@@ -485,6 +492,8 @@ public class Investor {
 		return club.convertSortedClients2String(i);
 	}
 	
+	
+	
 	public Club findClubBinary(int i, String thing) {
 		
 		ArrayList<Club> sorted = null; //- 2 +
@@ -522,6 +531,7 @@ public class Investor {
 				break;
 			case 2:
 				 evaluation = sorted.get(medium).getName();
+				 
 				break;
 						
 			case 3:
@@ -538,9 +548,11 @@ public class Investor {
 				break;
 			}
 			
-			
+			System.out.println(evaluation);
+			System.out.println(thing);
 			if(evaluation.equalsIgnoreCase(thing)) {
 				stop = sorted.get(medium); 
+				
 			} else if(thing.compareTo(evaluation)>0) {
 				begin = medium +1;
 			} else {
@@ -556,6 +568,29 @@ public class Investor {
 		return club.convertSortedPets2String(i, person);
 	}
 	
+	
+	
+
+	public String searchPersonByField(Club myClub, int selection, int id, String thing) {
+		String big = "ERROR: No client found";
+		Person p = null;
+		if (selection == 1) {
+			p = myClub.findPersonBinary( id);
+	
+		} else {
+			p= myClub.searchPersonByOtherFields(selection, thing);
+		}
+		
+		if (p != null) {
+			big = p.toString();
+		}
+		
+		return big;
+	}
+	
+	public String searchPetByField(Club myClub, Person person, int selection, int id, String thing) {
+		return myClub.searchPetByField(person, selection, id, thing);
+	}
 	
 	
 	

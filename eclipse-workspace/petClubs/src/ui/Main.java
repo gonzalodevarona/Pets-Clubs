@@ -37,6 +37,9 @@ public class Main {
 	public static void main(String[] args) {
 		Main execute = new Main();
 		execute.menu();
+		
+		
+		
 	
 	}
 	
@@ -166,12 +169,12 @@ public class Main {
 						
 					//SEARCH A CLIENT IN A CLUB BY A GIVEN FIELD
 					case 13: 
-						sortClientsByField();
+						searchClientsByField();
 						break;
 						
 					//SEARCH A PET FROM A CLIENT IN A CLUB BY A GIVEN FIELD
 					case 14: 
-						sortClientsByField();
+						searchPetsByField();
 						break;
 						
 					//QUIT PROGRAM
@@ -204,7 +207,7 @@ public class Main {
 		System.out.println("Please select a field in order to search a club by it:");
 		System.out.println("1. ID");
 		System.out.println("2. Name");
-		System.out.println("3. Issue date (newest to oldest)");
+		System.out.println("3. Issue date");
 		System.out.println("4. Type of pet");
 		System.out.println();
 		
@@ -213,17 +216,26 @@ public class Main {
 		
 		if (selection>= 1 && selection<=4 ) {
 			if (selection== 3) {
-				System.out.print("Please type the issue date with - between numbers(dd-mm-yyyy)"); String date = reader.nextLine();	
+				System.out.print("Please type the issue date with - between numbers(dd-mm-yyyy): "); String date = reader.nextLine();	
 				long first = System.nanoTime();
 				
 				Club c = investor.findClubBinary(selection, date);
-				System.out.println(c.toString());
-				long second = System.nanoTime();
-				long finalT = second - first;
-				System.out.println("Time for binary search in nanoseconds: "+finalT);
-					
+				if(c != null) {
+					System.out.println(c.toString());
+					long second = System.nanoTime();
+					long finalT = second - first;
+					System.out.println("Time for binary search in nanoseconds: "+finalT);
+				} else {
+					System.out.println();
+					System.out.println("ERROR: Club not found");
+					System.out.println();
+				}
+				
 			}else {
 			System.out.println("Please type the ID/Name/Type of pet: "); String stuff = reader.nextLine();
+			
+			
+			
 			long first = System.nanoTime();
 			
 			Club c = investor.findClubBinary(selection, stuff);
@@ -249,6 +261,196 @@ public class Main {
 		
 	}
 	
+	
+	public void searchClientsByField() {
+		try {
+			System.out.println("");
+			System.out.print("Please type the club's ID in order to make the search within it: "); String id = reader.nextLine();
+			System.out.println("");
+			Club myClub = investor.findClub(id);
+			if (myClub != null) {
+				
+				System.out.println("Please select a field in order to search a client by it:");
+				System.out.println("1. ID");
+				System.out.println("2. Name");
+				System.out.println("3. Last name");
+				System.out.println("4. Birth date");
+				System.out.println("5. Favorite type of pet");
+				System.out.println();
+				
+				System.out.println();
+				
+				int selection = reader.nextInt(); reader.nextLine();
+				
+				
+				if (selection>= 1 && selection<=5 ) {
+					
+					if (selection== 4) {
+						System.out.print("Please type the birth date with - between numbers(dd-mm-yyyy): "); String date = reader.nextLine();	
+						long first = System.nanoTime();
+						
+						System.out.println(investor.searchPersonByField(myClub, selection, 0,date));
+					
+						long second = System.nanoTime();
+						long finalT = second - first;
+						System.out.println("Time for binary search in nanoseconds: "+finalT);
+						
+						
+						
+					} else if(selection== 1) {
+						System.out.println("Please type the ID of the client: "); int idC = reader.nextInt(); reader.nextLine();
+						long first = System.nanoTime();
+						
+						System.out.println(investor.searchPersonByField(myClub, selection, idC,""));
+					
+						long second = System.nanoTime();
+						long finalT = second - first;
+						System.out.println("Time for binary search in nanoseconds: "+finalT);
+					
+					} else {
+					System.out.println("Please type the Name/Last name/Favorite type of pet: "); String stuff = reader.nextLine();
+					
+			
+					long first = System.nanoTime();
+					System.out.println(investor.searchPersonByField(myClub, selection, 0,stuff));
+					long second = System.nanoTime();
+					long finalT = second - first;
+					System.out.println("Time for binary search in nanoseconds: "+finalT);
+					
+				
+				
+					}
+				} else {
+					System.out.println("");
+					System.out.println("ERROR: Invalid selection");
+					System.out.println("");
+					}
+				
+				
+						
+					
+			} else {
+				System.out.println("");
+				System.out.println("ERROR: Club not found.");
+				System.out.println("");
+				} 
+			
+		} catch (InputMismatchException e) {
+			System.out.println("");
+			System.out.println("ERROR: Wrong data type.");
+			System.out.println("");
+			
+		} catch (NumberFormatException e) {
+			System.out.println("");
+			System.out.println("ERROR: Wrong data type.");
+			System.out.println("");
+		}
+		
+
+	}
+	
+	
+	public void searchPetsByField() {
+		try {
+			System.out.println("");
+			System.out.print("Please type the club's ID in order to make the search within it: "); String id = reader.nextLine();
+			System.out.println("");
+			Club myClub = investor.findClub(id);
+			if (myClub != null) {
+				
+				System.out.println("");
+				System.out.print("Please type the owner's ID in order to make the search within it: "); int idc = reader.nextInt(); reader.nextLine();
+				System.out.println("");
+				Person person = myClub.findPersonBinary(idc);
+				
+				if (person != null) {
+				
+				System.out.println("Please select a field in order to search a pet by it:");
+				System.out.println("1. ID");
+				System.out.println("2. Name");
+				System.out.println("3. Gender");
+				System.out.println("4. Birth date");
+				System.out.println("5. Type of pet");
+				System.out.println();
+				
+				System.out.println();
+				
+				int selection = reader.nextInt(); reader.nextLine();
+				
+				
+				if (selection>= 1 && selection<=5 ) {
+					
+					if (selection== 4) {
+						System.out.print("Please type the birth date with - between numbers(dd-mm-yyyy): "); String date = reader.nextLine();	
+						long first = System.nanoTime();
+						
+						System.out.println(investor.searchPetByField(myClub,person,selection, 0, date));
+						
+					
+						long second = System.nanoTime();
+						long finalT = second - first;
+						System.out.println("Time for binary search in nanoseconds: "+finalT);
+						
+						
+						
+					} else if(selection== 1) {
+						System.out.println("Please type the ID of the pet: "); int idC = reader.nextInt(); reader.nextLine();
+						long first = System.nanoTime();
+						
+						System.out.println(investor.searchPetByField(myClub,person,selection, idC, ""));
+						long second = System.nanoTime();
+						long finalT = second - first;
+						System.out.println("Time for binary search in nanoseconds: "+finalT);
+					
+					} else {
+					System.out.println("Please type the Name/Gender/type of pet: "); String stuff = reader.nextLine();
+					
+			
+					long first = System.nanoTime();
+					System.out.println(investor.searchPetByField(myClub,person,selection, 0, stuff));
+					long second = System.nanoTime();
+					long finalT = second - first;
+					System.out.println("Time for binary search in nanoseconds: "+finalT);
+					
+				
+				
+					}
+				} else {
+					System.out.println("");
+					System.out.println("ERROR: Invalid selection");
+					System.out.println("");
+					}
+				
+				
+						
+					
+			} else {
+				System.out.println("");
+				System.out.println("ERROR: Owner not found.");
+				System.out.println("");
+				} 
+				
+			} else {
+				System.out.println("");
+				System.out.println("ERROR: Club not found.");
+				System.out.println("");
+				}
+			
+		} catch (InputMismatchException e) {
+			System.out.println("");
+			System.out.println("ERROR: Wrong data type.");
+			System.out.println("");
+			
+		} catch (NumberFormatException e) {
+			System.out.println("");
+			System.out.println("ERROR: Wrong data type.");
+			System.out.println("");
+		}
+		
+
+	}
+	
+	
 	public void sortPetsByField() {
 		System.out.print("Please type the club's ID in order to sort its clients: "); String id = reader.nextLine();
 		System.out.println("");
@@ -263,7 +465,7 @@ public class Main {
 				System.out.println("Please select a field in order to sort all pets by it:");
 				System.out.println("1. ID");
 				System.out.println("2. Name");
-				System.out.println("3. Birth date (youngest to oldest)");
+				System.out.println("3. Birth date (oldest to youngest)");
 				System.out.println("4. Gender");
 				System.out.println("5. Type of pet");
 				System.out.println("note: every field is sorted upwards except issue date");
@@ -311,7 +513,7 @@ public class Main {
 			System.out.println("1. ID");
 			System.out.println("2. Name");
 			System.out.println("3. Last name");
-			System.out.println("4. Birth date (youngest to oldest)");
+			System.out.println("4. Birth date (oldest to youngest)");
 			System.out.println("5. Favorite type of pet");
 			System.out.println("note: every field is sorted upwards except issue date");
 			System.out.println();

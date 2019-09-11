@@ -294,29 +294,6 @@ public int compareLastName(Person person1, Person person2) {
 	public void removeOneObjectPet(Pet pet) {
 		pets.remove(pet);
 	}
-	
-	public void saveChanges() throws FileNotFoundException, IOException {
-		File file = new File(getId()+getName());
-		
-		
-		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
-		oos.writeObject(pets);
-		oos.close();
-			
-		
-	}
-	
-	public void loadChanges() throws FileNotFoundException, IOException, ClassNotFoundException {
-		
-		File file = new File(getId()+getName());
-		
-		if (file.exists()) {
-			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
-			pets = (ArrayList<Pet>) ois.readObject();
-			ois.close();
-		}
-	}
-	
 
 
 
@@ -334,10 +311,12 @@ public int compareLastName(Person person1, Person person2) {
 	public int compareDate(Person person1, Person person2) {
 		int value = 0;
 		GregorianCalendar person1Date = person1.getBirthDate();
+		
 		GregorianCalendar person2Date = person2.getBirthDate();
-    	if(person1Date.after(person2Date)){
+		
+    	if(person1Date.compareTo(person2Date)>0){
     		value = 1;
-    	}else if(person1Date.after(person2Date)){
+    	}else if(person1Date.compareTo(person2Date)<0){
     		value = -1;
     	} 
         
@@ -458,6 +437,99 @@ public int compareLastName(Person person1, Person person2) {
 		
 		return sorted;
 	
+	}
+
+
+	public Pet searchPetByOtherFields(int selection, String thing) {
+		Pet p = null;
+		switch (selection) {
+
+		case 2:
+			p = findPetBinaryByName(thing);		
+			break;
+					
+		case 3:
+			p = findPersonBinaryDate(thing);
+			break;
+			
+		case 4:
+			p = findPersonBinaryGender(thing);
+			break;
+		case 5:
+			p = findPetBinaryType(thing);
+			break;
+		
+		default:
+			break;
+		}
+		return p;
+	}
+
+
+	public Pet findPersonBinaryGender(String thing) {
+		Pet stop = null;
+		ArrayList<Pet> sortedByGender = sortPetsByGender(); //- 2 +
+		int begin = 0;
+		int end = sortedByGender.size() -1;
+		thing = thing.toUpperCase();
+		char real = thing.charAt(0);
+		while (begin <= end && stop == null) {
+			int medium = (begin+end)/2;
+			char gender2Evaluate = sortedByGender.get(medium).getGender();
+			if(gender2Evaluate==real) {
+				stop = sortedByGender.get(medium); 
+			} else if(real>gender2Evaluate) {
+				begin = medium +1;
+			} else {
+				end = medium -1;
+			}
+		}
+		
+		return stop;
+	}
+
+
+	public Pet findPersonBinaryDate(String thing) {
+		Pet stop = null;
+		ArrayList<Pet> sortedByDate = sortPetsByDate(); //- 2 +
+		int begin = 0;
+		int end = sortedByDate.size() -1;
+		thing = thing.toLowerCase();
+		while (begin <= end && stop == null) {
+			int medium = (begin+end)/2;
+			String date2Evaluate = sortedByDate.get(medium).date2String().toLowerCase();
+			if(date2Evaluate.equalsIgnoreCase(thing)) {
+				stop = sortedByDate.get(medium); 
+			} else if(thing.compareTo(date2Evaluate)>0) {
+				begin = medium +1;
+			} else {
+				end = medium -1;
+			}
+		}
+		
+		return stop;
+	}
+
+
+	public Pet findPetBinaryType(String thing) {
+		Pet stop = null;
+		ArrayList<Pet> sortedByType = sortPetsByType(); //- 2 +
+		int begin = 0;
+		int end = sortedByType.size() -1;
+		thing = thing.toLowerCase();
+		while (begin <= end && stop == null) {
+			int medium = (begin+end)/2;
+			String type2Evaluate = sortedByType.get(medium).getType().toLowerCase();
+			if(type2Evaluate.equalsIgnoreCase(thing)) {
+				stop = sortedByType.get(medium); 
+			} else if(thing.compareTo(type2Evaluate)>0) {
+				begin = medium +1;
+			} else {
+				end = medium -1;
+			}
+		}
+		
+		return stop;
 	}
 
 	
