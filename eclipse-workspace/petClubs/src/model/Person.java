@@ -5,7 +5,7 @@
 * DEPARTAMENTO TIC - ALGORTIMOS Y PROGRAMACIÓN II
 * LAB II
 * @AUTHOR: GONZALO DE VARONA <gonzalo.de1@correo.icesi.edu.co>
-* @LAST UPDATE DATE: 24 AUGUST 2019
+* @LAST UPDATE DATE: 11 SEPTEMBER 2019
 * ˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜
 */
 
@@ -28,7 +28,7 @@ import java.util.GregorianCalendar;
 
 public class Person implements Serializable, Comparable<Person>, Comparator<Person> {
 	
-	public final static String PEOPLECSV = "dataTest/People.csv";
+	public final static String PEOPLECSV = "data/People.csv";
 	
 	private int id;
 	private String name;
@@ -188,6 +188,7 @@ public int compareLastName(Person person1, Person person2) {
 		ArrayList<Pet> sortedByID = sortPetsById(); //- 2 +
 		int begin = 0;
 		int end = sortedByID.size() -1;
+		long first = System.nanoTime();
 		
 		while (begin <= end && stop == null) {
 			int medium = (begin+end)/2;
@@ -200,6 +201,11 @@ public int compareLastName(Person person1, Person person2) {
 				end = medium -1;
 			}
 		}
+		
+		long second = System.nanoTime();
+		long finalT = second - first;
+		System.out.println("Time for binary search in nanoseconds: "+finalT);
+		
 		
 		return stop;
 	}
@@ -237,17 +243,22 @@ public int compareLastName(Person person1, Person person2) {
 		return sorted;
 	}
 	
-	
+	//ONLY SORTING METHOD BY SELECTION, IT IS GOOD ENOUGH, VICTOR TOLD ME THIS PROGRAM HAD TO HAVE AT LEAST ONE OF EACH SORTING METHODS
 	public ArrayList<Pet> sortPetsById(){
 		ArrayList<Pet> sorted = getPets();
-		for (int i = 1; i < sorted.size(); i++) {
-			for (int j = i; j > 0; j--) {
+		for (int i = 0; i < sorted.size()-1; i++) {
+			Pet lowest = sorted.get(i);
+			int position =i;
+			for (int j=i +1; j < sorted.size(); j++) {
 				
-				if (sorted.get(j).compare(sorted.get(j), sorted.get(j-1)) < 0) {
-					Pet temp = sorted.get(j);
-					sorted.set(j, sorted.get(j-1)) ;
-					sorted.set(j-1, temp) ;
+				if (sorted.get(j).compare(sorted.get(j), lowest) < 0) {
+					lowest = sorted.get(j);
+					position = j;
+					
 				} 
+				Pet temp = sorted.get(i);
+				sorted.set(i, lowest) ;
+				sorted.set(position, temp) ;
 			}
 		}
 		
@@ -259,7 +270,7 @@ public int compareLastName(Person person1, Person person2) {
 		ArrayList<Pet> sortedByName = sortPetsByName(); //- 2 +
 		int begin = 0;
 		int end = sortedByName.size() -1;
-		
+		long first = System.nanoTime();
 		while (begin <= end && stop == null) {
 			int medium = (begin+end)/2;
 			String name2Evaluate = sortedByName.get(medium).getName();
@@ -271,6 +282,11 @@ public int compareLastName(Person person1, Person person2) {
 				end = medium -1;
 			}
 		}
+		
+		long second = System.nanoTime();
+		long finalT = second - first;
+		System.out.println("Time for binary search in nanoseconds: "+finalT);
+		
 		
 		return stop;
 	}
@@ -449,11 +465,12 @@ public int compareLastName(Person person1, Person person2) {
 			break;
 					
 		case 3:
-			p = findPersonBinaryDate(thing);
+			
+			p = findPetBinaryGender(thing);
 			break;
 			
 		case 4:
-			p = findPersonBinaryGender(thing);
+			p = findPersonBinaryDate(thing);
 			break;
 		case 5:
 			p = findPetBinaryType(thing);
@@ -466,14 +483,17 @@ public int compareLastName(Person person1, Person person2) {
 	}
 
 
-	public Pet findPersonBinaryGender(String thing) {
+	public Pet findPetBinaryGender(String thing) {
 		Pet stop = null;
 		ArrayList<Pet> sortedByGender = sortPetsByGender(); //- 2 +
 		int begin = 0;
 		int end = sortedByGender.size() -1;
 		thing = thing.toUpperCase();
 		char real = thing.charAt(0);
+		
+		long first = System.nanoTime();
 		while (begin <= end && stop == null) {
+			
 			int medium = (begin+end)/2;
 			char gender2Evaluate = sortedByGender.get(medium).getGender();
 			if(gender2Evaluate==real) {
@@ -485,6 +505,12 @@ public int compareLastName(Person person1, Person person2) {
 			}
 		}
 		
+		long second = System.nanoTime();
+		long finalT = second - first;
+		System.out.println("Time for binary search in nanoseconds: "+finalT);
+		
+		
+		
 		return stop;
 	}
 
@@ -492,6 +518,7 @@ public int compareLastName(Person person1, Person person2) {
 	public Pet findPersonBinaryDate(String thing) {
 		Pet stop = null;
 		ArrayList<Pet> sortedByDate = sortPetsByDate(); //- 2 +
+		long first = System.nanoTime();
 		int begin = 0;
 		int end = sortedByDate.size() -1;
 		thing = thing.toLowerCase();
@@ -506,6 +533,10 @@ public int compareLastName(Person person1, Person person2) {
 				end = medium -1;
 			}
 		}
+		long second = System.nanoTime();
+		long finalT = second - first;
+		System.out.println("Time for binary search in nanoseconds: "+finalT);
+		
 		
 		return stop;
 	}
@@ -517,6 +548,7 @@ public int compareLastName(Person person1, Person person2) {
 		int begin = 0;
 		int end = sortedByType.size() -1;
 		thing = thing.toLowerCase();
+		long first = System.nanoTime();
 		while (begin <= end && stop == null) {
 			int medium = (begin+end)/2;
 			String type2Evaluate = sortedByType.get(medium).getType().toLowerCase();
@@ -529,7 +561,112 @@ public int compareLastName(Person person1, Person person2) {
 			}
 		}
 		
+		long second = System.nanoTime();
+		long finalT = second - first;
+		System.out.println("Time for binary search in nanoseconds: "+finalT);
+		
+		
 		return stop;
+	}
+
+
+	public Pet findPetSequence(int selection, int i, String thing) {
+		Pet p = null;
+		switch (selection) {
+		
+		case 1:
+			p = findPetId(i);		
+			break;
+
+		case 2:
+			p = findPetName(thing);		
+			break;
+					
+		case 3:
+			p = findPetGender(thing);
+			break;
+			
+		case 4:
+			p = findPersonBinaryDate(thing); 
+			//MISSING
+			//MISSING
+			//MISSING
+			//MISSING
+			break;
+		case 5:
+			p = findPetType(thing);
+			break;
+		
+		default:
+			break;
+		}
+		return p;
+	}
+
+
+	public Pet findPetGender(String thing) {
+		Pet p = null;
+		
+		thing = thing.toUpperCase();
+		char realT = thing.charAt(0);
+		for (int j = 0; j < pets.size() && p == null; j++) {
+			if (pets.get(j).getGender() == realT) {
+				p = pets.get(j);
+				
+			} 
+			
+		}
+		
+		
+		return p;
+	}
+
+
+	public Pet findPetId(int i) {
+		Pet p = null;
+		
+		for (int j = 0; j < pets.size() && p == null; j++) {
+			if (pets.get(j).getId()==i) {
+				p = pets.get(j);
+				
+			} 
+			
+		}
+		
+		
+		return p;
+	}
+	
+	public Pet findPetType(String thing) {
+		Pet p = null;
+		
+		thing = thing.toUpperCase();
+		for (int j = 0; j < pets.size() && p == null; j++) {
+			if (pets.get(j).getType().toUpperCase().equalsIgnoreCase(thing)) {
+				p = pets.get(j);
+				
+			} 
+			
+		}
+		
+		
+		return p;
+	}
+	
+	public Pet findPetName(String thing) {
+		Pet p = null;
+		
+		thing = thing.toUpperCase();
+		for (int j = 0; j < pets.size() && p == null; j++) {
+			if (pets.get(j).getName().toUpperCase().equalsIgnoreCase(thing)) {
+				p = pets.get(j);
+				
+			} 
+			
+		}
+		
+		
+		return p;
 	}
 
 	

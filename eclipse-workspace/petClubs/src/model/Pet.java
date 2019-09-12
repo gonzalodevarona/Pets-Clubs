@@ -5,7 +5,7 @@
 * DEPARTAMENTO TIC - ALGORTIMOS Y PROGRAMACIÓN II
 * LAB II
 * @AUTHOR: GONZALO DE VARONA <gonzalo.de1@correo.icesi.edu.co>
-* @LAST UPDATE DATE: 24 AUGUST 2019
+* @LAST UPDATE DATE: 11 SEPTEMBER 2019
 * ˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜
 */
 
@@ -30,7 +30,7 @@ public class Pet implements Serializable, Comparable<Pet>, Comparator<Pet> {
 	public final static String FERRET = "Ferret";
 	public final static char MALE = 'M';
 	public final static char FEMALE = 'F';
-	public final static String PETSCSV = "dataTest/Pets.csv";
+	public final static String PETSCSV = "data/Pets.csv";
 	
 	
 	//ATTRIBUTES

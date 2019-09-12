@@ -5,7 +5,7 @@
 * DEPARTAMENTO TIC - ALGORTIMOS Y PROGRAMACIÓN II
 * LAB II
 * @AUTHOR: GONZALO DE VARONA <gonzalo.de1@correo.icesi.edu.co>
-* @LAST UPDATE DATE: 17 AUGUST 2019
+* @LAST UPDATE DATE: 11 SEPTEMBER 2019
 * ˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜
 */
 
@@ -73,12 +73,24 @@ public class Main {
 		
 		try {
 			investor.loadClubsPlainText();
-			investor.loadPeoplePlainText();
-			investor.loadPetsPlainText();
+			boolean stop = false;
+			for (int i = 0; i < investor.getClubs().size() && !stop; i++) {
+				if(investor.loadChanges(i) == false) {
+					investor.loadPeopleNPetsPlainText();
+					stop = true;
+				} 
+			}
+			
+			
+			
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
-		} 
+		} catch (ClassNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
 		System.out.println("");
 		System.out.println("");
 
@@ -195,7 +207,7 @@ public class Main {
 				reader.nextLine();
 				System.out.println();
 			}
-
+			
 		}
 		
 	}
@@ -216,15 +228,23 @@ public class Main {
 		
 		if (selection>= 1 && selection<=4 ) {
 			if (selection== 3) {
-				System.out.print("Please type the issue date with - between numbers(dd-mm-yyyy): "); String date = reader.nextLine();	
-				long first = System.nanoTime();
+				System.out.print("Please type the issue day: "); int day = reader.nextInt(); reader.nextLine();
+				System.out.print("Please type the issue month: "); int month = reader.nextInt(); reader.nextLine();
+				System.out.print("Please type the issue year: "); int year = reader.nextInt(); reader.nextLine();
+				String date = year+"-"+month+"-"+day;
+				
+				
 				
 				Club c = investor.findClubBinary(selection, date);
 				if(c != null) {
 					System.out.println(c.toString());
-					long second = System.nanoTime();
-					long finalT = second - first;
-					System.out.println("Time for binary search in nanoseconds: "+finalT);
+					System.out.println();
+					long first1 = System.nanoTime();
+					c = investor.findClubSequence(selection, date);
+					long second2 = System.nanoTime();
+					long finalT2 = second2- first1;
+					System.out.println("Time for sequential search in nanoseconds: "+finalT2);
+					
 				} else {
 					System.out.println();
 					System.out.println("ERROR: Club not found");
@@ -236,14 +256,19 @@ public class Main {
 			
 			
 			
-			long first = System.nanoTime();
+			
+			
 			
 			Club c = investor.findClubBinary(selection, stuff);
 			if (c != null) {
 				System.out.println(c.toString());
-				long second = System.nanoTime();
-				long finalT = second - first;
-				System.out.println("Time for binary search in nanoseconds: "+finalT);
+				
+				System.out.println();
+				long first1 = System.nanoTime();
+				c = investor.findClubSequence(selection, stuff);
+				long second2 = System.nanoTime();
+				long finalT2 = second2- first1;
+				System.out.println("Time for sequential search in nanoseconds: "+finalT2);
 				
 			} else {
 				System.out.println("");
@@ -287,38 +312,48 @@ public class Main {
 					
 					if (selection== 4) {
 						System.out.print("Please type the birth date with - between numbers(dd-mm-yyyy): "); String date = reader.nextLine();	
-						long first = System.nanoTime();
+						
 						
 						System.out.println(investor.searchPersonByField(myClub, selection, 0,date));
 					
-						long second = System.nanoTime();
-						long finalT = second - first;
-						System.out.println("Time for binary search in nanoseconds: "+finalT);
 						
-						
+						System.out.println();
+						long first1 = System.nanoTime();
+						Person p = investor.findPersonSequence(myClub, selection, 0,date);
+						long second2 = System.nanoTime();
+						long finalT2 = second2- first1;
+						System.out.println("Time for sequential search in nanoseconds: "+finalT2);
+
 						
 					} else if(selection== 1) {
 						System.out.println("Please type the ID of the client: "); int idC = reader.nextInt(); reader.nextLine();
-						long first = System.nanoTime();
+						
 						
 						System.out.println(investor.searchPersonByField(myClub, selection, idC,""));
 					
-						long second = System.nanoTime();
-						long finalT = second - first;
-						System.out.println("Time for binary search in nanoseconds: "+finalT);
+												System.out.println();
+						long first1 = System.nanoTime();
+						Person p = investor.findPersonSequence(myClub, selection, idC, "");
+						long second2 = System.nanoTime();
+						long finalT2 = second2- first1;
+						System.out.println("Time for sequential search in nanoseconds: "+finalT2);
+						
 					
 					} else {
 					System.out.println("Please type the Name/Last name/Favorite type of pet: "); String stuff = reader.nextLine();
 					
 			
-					long first = System.nanoTime();
-					System.out.println(investor.searchPersonByField(myClub, selection, 0,stuff));
-					long second = System.nanoTime();
-					long finalT = second - first;
-					System.out.println("Time for binary search in nanoseconds: "+finalT);
 					
-				
-				
+					System.out.println(investor.searchPersonByField(myClub, selection, 0,stuff));
+					
+					
+					System.out.println();
+					long first1 = System.nanoTime();
+					Person p = investor.findPersonSequence(myClub, selection, 0, stuff); //missing date
+					long second2 = System.nanoTime();
+					long finalT2 = second2- first1;
+					System.out.println("Time for sequential search in nanoseconds: "+finalT2);
+
 					}
 				} else {
 					System.out.println("");
@@ -382,35 +417,47 @@ public class Main {
 					
 					if (selection== 4) {
 						System.out.print("Please type the birth date with - between numbers(dd-mm-yyyy): "); String date = reader.nextLine();	
-						long first = System.nanoTime();
+						
 						
 						System.out.println(investor.searchPetByField(myClub,person,selection, 0, date));
 						
 					
-						long second = System.nanoTime();
-						long finalT = second - first;
-						System.out.println("Time for binary search in nanoseconds: "+finalT);
+						System.out.println();
+						long first1 = System.nanoTime();
+						Pet p = investor.findPetSequence(myClub, person, selection, 0, date); //missing date
+						long second2 = System.nanoTime();
+						long finalT2 = second2- first1;
+						System.out.println("Time for sequential search in nanoseconds: "+finalT2);
+						
 						
 						
 						
 					} else if(selection== 1) {
 						System.out.println("Please type the ID of the pet: "); int idC = reader.nextInt(); reader.nextLine();
-						long first = System.nanoTime();
+						
 						
 						System.out.println(investor.searchPetByField(myClub,person,selection, idC, ""));
-						long second = System.nanoTime();
-						long finalT = second - first;
-						System.out.println("Time for binary search in nanoseconds: "+finalT);
+						
+						System.out.println();
+						long first1 = System.nanoTime();
+						Pet p = investor.findPetSequence(myClub, person, selection, idC, "");
+						long second2 = System.nanoTime();
+						long finalT2 = second2- first1;
+						System.out.println("Time for sequential search in nanoseconds: "+finalT2);
 					
 					} else {
 					System.out.println("Please type the Name/Gender/type of pet: "); String stuff = reader.nextLine();
 					
 			
-					long first = System.nanoTime();
+					
 					System.out.println(investor.searchPetByField(myClub,person,selection, 0, stuff));
-					long second = System.nanoTime();
-					long finalT = second - first;
-					System.out.println("Time for binary search in nanoseconds: "+finalT);
+					
+					System.out.println();
+					long first1 = System.nanoTime();
+					Pet p = investor.findPetSequence(myClub, person, selection, 0, stuff);
+					long second2 = System.nanoTime();
+					long finalT2 = second2- first1;
+					System.out.println("Time for sequential search in nanoseconds: "+finalT2);
 					
 				
 				
@@ -1011,10 +1058,15 @@ public class Main {
 		public void theGoodbye() {
 			try {
 				investor.saveClubsCVS();
-			} catch (FileNotFoundException e) {
+				investor.saveChanges();
+			} catch (FileNotFoundException  e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch ( IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
 			
 			System.out.println("");
 			System.out.println("");

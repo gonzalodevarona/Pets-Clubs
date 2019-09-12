@@ -5,7 +5,7 @@
 * DEPARTAMENTO TIC - ALGORTIMOS Y PROGRAMACIÓN II
 * LAB II
 * @AUTHOR: GONZALO DE VARONA <gonzalo.de1@correo.icesi.edu.co>
-* @LAST UPDATE DATE: 24 AUGUST 2019
+* @LAST UPDATE DATE: 11 SEPTEMBER 2019
 * ˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜
 */
 
@@ -18,7 +18,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 
@@ -104,7 +103,7 @@ public class Investor {
 		
 	}
 	
-	public void loadPeoplePlainText() throws FileNotFoundException, IOException {
+	public void loadPeopleNPetsPlainText() throws FileNotFoundException, IOException {
 		String filePath = Person.PEOPLECSV;
 		File file = new File(filePath);
 		
@@ -116,26 +115,72 @@ public class Investor {
 		String[] words = new String[5];
 		int j = 0;
 		
-		while (line != null) {
-			words = line.split(";");
+		
+		
+		
+		String filePathp = Pet.PETSCSV;
+		File filep = new File(filePathp);
+		
+		
+		FileReader readerp = new FileReader(filep);
+		BufferedReader bufferRp = new BufferedReader(readerp);
+		
+		String linep = bufferRp.readLine();
+		String[] wordsp = new String[5];
+		
+		while (linep != null && line != null) {
 			
-			//System.out.println("'"+words[0].length()+"'");
-			int idP = parseInt(words[0]);
-			String nameP = words[1];
-			String lastNameP = words[2];
-			String favTypePetP = words[4];
+				words = line.split(";");
+				
+				
+				int id = parseInt(words[0]);
+				String name = words[1];
+				String lastName = words[2];
+				String favTypePet = words[4];
+				
+				
+				String[] dateArray = words[3].split("/");
+				
+				int day = Integer.parseInt(dateArray[1]);
+				int month = ((Integer.parseInt(dateArray[0])) - 1);
+				int year = Integer.parseInt(dateArray[2]);
+				
+				GregorianCalendar birthDate = new GregorianCalendar(year, month, day);
+				Person person = new Person(id, name, lastName, birthDate, favTypePet);
 			
 			
-			String[] dateArray = words[3].split("/");
 			
-			int day = Integer.parseInt(dateArray[1]);
-			int month = ((Integer.parseInt(dateArray[0])) - 1);
-			int year = Integer.parseInt(dateArray[2]);
+				wordsp = linep.split(";");
+				
+				int idP = (parseInt(wordsp[0]));
+				String nameP = wordsp[1];
+				
+				char genderP = wordsp[3].charAt(0);
+				String typeP = wordsp[4];
+				
+				String[] dateArrayP = wordsp[2].split("/");
+				
+				
+				
+				int dayP = Integer.parseInt(dateArrayP[1]);
+				int monthP = ((Integer.parseInt(dateArrayP[0])) - 1);
+				int yearP = Integer.parseInt(dateArrayP[2]);
+				
+				GregorianCalendar birthDateP = new GregorianCalendar(yearP, monthP, dayP);
+				Pet pet = new Pet(idP, nameP,birthDateP, genderP, typeP, person);
+		
 			
-			GregorianCalendar birthDateP = new GregorianCalendar(year, month, day);
+			
 
 			
-			Person person = new Person(idP, nameP, lastNameP, birthDateP, favTypePetP);
+			person.addPet(pet);
+			line = bufferR.readLine();
+			linep = bufferRp.readLine();
+			
+			
+
+			
+			
 			if(j >= clubs.size()) {
 				j = 0;
 			}
@@ -143,9 +188,25 @@ public class Investor {
 			clubs.get(j).addClient(person);
 			j++;
 			
-			line = bufferR.readLine();
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
 		}
 		
+		for (int i = 0; i < clubs.size(); i++) {
+			clubs.get(i).assignType4Club();
+		}
+		
+		bufferRp.close();
+		readerp.close();
 		
 		bufferR.close();
 		reader.close();
@@ -178,62 +239,8 @@ public class Investor {
 		return text.trim();
 	}
 	
-	public ArrayList<Pet> convertPetsPlainText2ArrayList() throws FileNotFoundException, IOException {
-		ArrayList<Pet> pets = new ArrayList<Pet>();
-		
-		String filePath = Pet.PETSCSV;
-		File file = new File(filePath);
-		
-		
-		FileReader reader = new FileReader(file);
-		BufferedReader bufferR = new BufferedReader(reader);
-		
-		String line = bufferR.readLine();
-		String[] words = new String[5];
-		
-		while (line != null) {
-			words = line.split(";");
-			
-			int idP = (parseInt(words[0]));
-			String nameP = words[1];
-			char gender = words[3].charAt(0);
-			String type = words[4];
-			
-			String[] dateArray = words[2].split("/");
-			
-			int day = Integer.parseInt(dateArray[1]);
-			int month = ((Integer.parseInt(dateArray[0])) - 1);
-			int year = Integer.parseInt(dateArray[2]);
-			
-			GregorianCalendar birthDate = new GregorianCalendar(year, month, day);
+
 	
-			
-			Pet pet = new Pet(idP, nameP,birthDate, gender, type, null);
-			pets.add(pet);
-			line = bufferR.readLine();
-		}
-		
-		
-		bufferR.close();
-		reader.close();
-			
-		return pets;
-		
-	}
-	
-	public void loadPetsPlainText() throws FileNotFoundException, IOException {
-		ArrayList<Pet> pets = convertPetsPlainText2ArrayList();
-		int i = 0;
-		while ( i <= clubs.size() && pets.size() != 0) {
-			
-			if (i>=clubs.size()) {
-				i = 0;
-			}
-			pets = clubs.get(i).loadPetsPlainText(pets);
-			i++;
-		}
-		
-	}
 	
 	public ArrayList<Club> sortByNumberOfClients(){
 		ArrayList<Club> sorted = getClubs();
@@ -363,11 +370,12 @@ public class Investor {
 		clubs.remove(club);
 	}
 	
+	//THIS METHOD IS SORTING BY BUBBLE, IT IS THE ONLY SORTING METHOD WHICH IS BUBBLE, VICTOR TOLD ME IT WAS GOOD ENOUGH IT IS ONLY ONE 
 	public ArrayList<Club> sortClubsById(){
 		ArrayList<Club> sorted = getClubs();
 		
-		for (int i = 1; i < sorted.size(); i++) {
-			for (int j = i; j > 0; j--) {
+		for (int i = sorted.size(); i > 0; i--) {
+			for (int j = 0; j < i; j++) {
 				
 				if (sorted.get(j).compare(sorted.get(j), sorted.get(j-1)) < 0) {
 					Club temp = sorted.get(j);
@@ -380,6 +388,8 @@ public class Investor {
 		
 		return sorted;
 	}
+	
+
 	
 	public ArrayList<Club> sortClubsByName(){
 		ArrayList<Club> sorted = getClubs();
@@ -493,72 +503,143 @@ public class Investor {
 	}
 	
 	
+	public Club findClubBinaryByName(String name) {
+		Club stop = null;
+		ArrayList<Club> sortedByName = sortClubsByName(); //- 2 +
+		long first1 = System.nanoTime();
+		
+		int begin = 0;
+		int end = sortedByName.size() -1;
+		name = name.toUpperCase();
+		while (begin <= end && stop == null) {
+			int medium = (begin+end)/2;
+			String name2Evaluate = sortedByName.get(medium).getName().toUpperCase();
+			if(name2Evaluate.equalsIgnoreCase(name)) {
+				stop = sortedByName.get(medium); 
+			} else if(name.compareTo(name2Evaluate)>0) {
+				begin = medium +1;
+			} else {
+				end = medium -1;
+			}
+		}
+		long second2 = System.nanoTime();
+		long finalT2 = second2- first1;
+		System.out.println("Time for sequential search in nanoseconds: "+finalT2);
+		
+		
+		return stop;
+	}
+	
+	public Club findClubBinaryByType(String thing) {
+		Club stop = null;
+		ArrayList<Club> sortedByType = sortClubsByType(); //- 2 +
+		int begin = 0;
+		int end = sortedByType.size() -1;
+		
+		long first1 = System.nanoTime();
+		while (begin <= end && stop == null) {
+			int medium = (begin+end)/2;
+			String type2Evaluate = sortedByType.get(medium).getName();
+			if(type2Evaluate.equalsIgnoreCase(thing)) {
+				stop = sortedByType.get(medium); 
+			} else if(thing.compareTo(type2Evaluate)>0) {
+				begin = medium +1;
+			} else {
+				end = medium -1;
+			}
+		}
+		long second2 = System.nanoTime();
+		long finalT2 = second2- first1;
+		System.out.println("Time for sequential search in nanoseconds: "+finalT2);
+		
+		
+		return stop;
+	}
+	
+	public Club findClubBinaryByDate(String thing) {
+		Club stop = null;
+		ArrayList<Club> sortedByDate = sortClubsByDate(); //- 2 +
+		int begin = 0;
+		int end = sortedByDate.size() -1;
+		String[] dateArray = thing.split("-");
+		int month = Integer.parseInt(dateArray[1]);
+		--month;
+		if(month < 0) {
+			++month;
+		}
+		
+		GregorianCalendar gc = new GregorianCalendar(Integer.parseInt(dateArray[0]), month, Integer.parseInt(dateArray[2]));
+		
+		while (begin <= end && stop == null) {
+			int medium = (begin+end)/2;
+			GregorianCalendar date2Evaluate = sortedByDate.get(medium).getIssueDate();
+			
+			if(gc.equals(date2Evaluate)) {
+				stop = sortedByDate.get(medium); 
+			} else if(gc.compareTo(date2Evaluate)>0) {
+				begin = medium +1;
+			} else {
+				end = medium -1;
+			}
+		}
+		
+		return stop;
+	}
+	
+	public Club findClubBinaryById(String thing) {
+		Club stop = null;
+		ArrayList<Club> sortedById = sortClubsById(); //- 2 +
+		
+		long first1 = System.nanoTime();
+		int begin = 0;
+		int end = sortedById.size() -1;
+		
+		while (begin <= end && stop == null) {
+			int medium = (begin+end)/2;
+			String id2Evaluate = sortedById.get(medium).getId();
+			if(id2Evaluate.equalsIgnoreCase(thing)) {
+				stop = sortedById.get(medium); 
+			} else if(thing.compareTo(id2Evaluate)>0) {
+				begin = medium +1;
+			} else {
+				end = medium -1;
+			}
+		}
+		
+		long second2 = System.nanoTime();
+		long finalT2 = second2- first1;
+		System.out.println("Time for sequential search in nanoseconds: "+finalT2);
+		
+		return stop;
+	}
+	
 	
 	public Club findClubBinary(int i, String thing) {
-		
-		ArrayList<Club> sorted = null; //- 2 +
+		Club stop = null;
 		switch (i) {
 		case 1:
-			sorted = sortClubsById();
+			stop = findClubBinaryById(thing);
 			
 			break;
 		case 2:
-			sorted = sortClubsByName();		
+				
+			stop = findClubBinaryByName(thing);
 			break;
 					
 		case 3:
-			sorted = sortClubsByDate();
+			
+			stop = findClubBinaryByDate(thing);
 			break;
 			
 		case 4:
-			sorted = sortClubsByType();
+			 
+			stop = findClubBinaryByType(thing);
 			break;
 
 		default:
 			break;
 		}
 		
-		int begin = 0;
-		int end = sorted.size() -1;
-		Club stop = null;
-		while (begin <= end && stop == null) {
-			int medium = (begin+end)/2;
-			String evaluation = "";
-			switch (i) {
-			case 1:
-				 evaluation = sorted.get(medium).getId();
-				
-				break;
-			case 2:
-				 evaluation = sorted.get(medium).getName();
-				 
-				break;
-						
-			case 3:
-				evaluation = sorted.get(medium).date2String();
-				break;
-				
-			case 4:
-				evaluation = sorted.get(medium).getTypeOfPet();
-				break;
-			
-		
-
-			default:
-				break;
-			}
-			
-			System.out.println(evaluation);
-			System.out.println(thing);
-			if(evaluation.equalsIgnoreCase(thing)) {
-				stop = sorted.get(medium); 
-				
-			} else if(thing.compareTo(evaluation)>0) {
-				begin = medium +1;
-			} else {
-				end = medium -1;
-			}
-		}
 		
 		return stop;
 	}
@@ -591,6 +672,99 @@ public class Investor {
 	public String searchPetByField(Club myClub, Person person, int selection, int id, String thing) {
 		return myClub.searchPetByField(person, selection, id, thing);
 	}
+
+	public Club findClubSequence(int selection, String stuff) {
+		Club stop = null;
+		switch (selection) {
+		case 1:
+			stop = findClub(stuff);
+			
+			break;
+		case 2:
+				
+			stop = findClubByName(stuff);
+			break;
+					
+		case 3:
+			
+			stop = findClubBinaryByDate(stuff);
+			break;
+			
+		case 4:
+			 
+			stop = findClubBinaryByType(stuff);
+			break;
+
+		default:
+			break;
+		}
+		
+		
+		return stop;
+	}
+	
+	public Club findClubDate(String thing) {
+		Club club = null;
+		boolean stop = false;
+		String[] dateArray = thing.split("-");
+		int month = Integer.parseInt(dateArray[1]);
+		if(month > 0) {
+			month = month -1;
+			GregorianCalendar gc = new GregorianCalendar(Integer.parseInt(dateArray[0]), month, Integer.parseInt(dateArray[2]));
+			
+			
+			for (int i = 0; i < clubs.size() && !stop; i++) {
+				if (clubs.get(i).getIssueDate().compareTo(gc) == 0) {
+					club = clubs.get(i);
+					stop = true;
+				} 
+				
+			}
+		}
+		return club;
+	}
+	
+	
+	public Club findClubType(String type) {
+		Club club = null;
+		boolean stop = false;
+		for (int i = 0; i < clubs.size() && !stop; i++) {
+			if (clubs.get(i).getTypeOfPet().equalsIgnoreCase(type)) {
+				club = clubs.get(i);
+				stop = true;
+			} 
+			
+		}
+		
+		
+		return club;
+	}
+
+	public Person findPersonSequence(Club myClub, int selection, int i, String thing) {
+		return myClub.findPersonSequence( selection, i, thing);
+	}
+
+	public Pet findPetSequence(Club myClub, Person person, int selection, int i, String date) {
+		return myClub.findPetSequence(person, selection, i, date);
+		
+	}
+	
+	
+	public void saveChanges() throws IOException {
+		for (int i = 0; i < clubs.size(); i++) {
+			clubs.get(i).saveChanges();
+		}
+	}
+	
+	public boolean loadChanges(int i) throws IOException, ClassNotFoundException {
+		boolean stop = false;
+		if (clubs.get(i).loadChanges()) {
+			stop = true;
+		}
+		return stop;
+	}
+	
+	
 	
 	
 	

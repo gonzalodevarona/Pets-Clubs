@@ -5,7 +5,7 @@
 * DEPARTAMENTO TIC - ALGORTIMOS Y PROGRAMACIÓN II
 * LAB II
 * @AUTHOR: GONZALO DE VARONA <gonzalo.de1@correo.icesi.edu.co>
-* @LAST UPDATE DATE: 24 AUGUST 2019
+* @LAST UPDATE DATE: 11 SEPTEMBER 2019
 * ˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜˜
 */
 
@@ -26,7 +26,7 @@ import java.util.GregorianCalendar;
 
 public class Club implements Comparable<Club>, Comparator<Club> {
 	
-	public final static String CLUBSCSV = "dataTest/Clubs.csv";
+	public final static String CLUBSCSV = "data/Clubs.csv";
 	
 	private String id;
 	private String name;
@@ -72,7 +72,7 @@ public class Club implements Comparable<Club>, Comparator<Club> {
 	
 	public void addClient(Person person) {
 		clients.add(person);
-		assignType4Club();
+		//assignType4Club();
 	}
 	public String getTypeOfPet() {
 		return typeOfPet;
@@ -140,15 +140,17 @@ public class Club implements Comparable<Club>, Comparator<Club> {
 		
 	}
 	
-	public void loadChanges() throws FileNotFoundException, IOException, ClassNotFoundException {
-		
+	public boolean loadChanges() throws FileNotFoundException, IOException, ClassNotFoundException {
+		boolean done = false;
 		File file = new File(getId()+getName());
 		
 		if (file.exists()) {
 			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
 			clients = (ArrayList<Person>) ois.readObject();
 			ois.close();
+			done = true;
 		}
+		return done;
 	}
 
 	
@@ -224,7 +226,7 @@ public class Club implements Comparable<Club>, Comparator<Club> {
 		ArrayList<Person> sortedByID = sortClientsById(); //- 2 +
 		int begin = 0;
 		int end = sortedByID.size() -1;
-		
+		long first=System.nanoTime();
 		while (begin <= end && stop == null) {
 			int medium = (begin+end)/2;
 			int id2Evaluate = sortedByID.get(medium).getId();
@@ -237,6 +239,10 @@ public class Club implements Comparable<Club>, Comparator<Club> {
 			}
 		}
 		
+		long second = System.nanoTime();
+		long finalT = second - first;
+		System.out.println("Time for binary search in nanoseconds: "+finalT);
+		
 		return stop;
 	}
 	
@@ -246,7 +252,7 @@ public class Club implements Comparable<Club>, Comparator<Club> {
 		int begin = 0;
 		int end = sortedByName.size() -1;
 		person = person.toLowerCase();
-		
+		long first = System.nanoTime();
 		while (begin <= end && stop == null) {
 			int medium = (begin+end)/2;
 			String name2Evaluate =  sortedByName.get(medium).getName().toLowerCase();
@@ -258,6 +264,11 @@ public class Club implements Comparable<Club>, Comparator<Club> {
 				end = medium -1;
 			}
 		}
+		
+		long second = System.nanoTime();
+		long finalT = second - first;
+		System.out.println("Time for binary search in nanoseconds: "+finalT);
+		
 		
 		return stop;
 	}
@@ -523,6 +534,7 @@ public class Club implements Comparable<Club>, Comparator<Club> {
 	public Person findPersonBinaryLastName(String person) {
 		Person stop = null;
 		ArrayList<Person> sortedByLastName = sortClientsByLastName(); //- 2 +
+		long first = System.nanoTime();
 		int begin = 0;
 		int end = sortedByLastName.size() -1;
 		person = person.toLowerCase();
@@ -537,6 +549,11 @@ public class Club implements Comparable<Club>, Comparator<Club> {
 				end = medium -1;
 			}
 		}
+		long second = System.nanoTime();
+		long finalT = second - first;
+		System.out.println("Time for binary search in nanoseconds: "+finalT);
+		
+
 		
 		return stop;
 	}
@@ -544,6 +561,7 @@ public class Club implements Comparable<Club>, Comparator<Club> {
 	public Person findPersonBinaryType(String person) {
 		Person stop = null;
 		ArrayList<Person> sortedByType = sortClientsByType(); //- 2 +
+		long first = System.nanoTime();
 		int begin = 0;
 		int end = sortedByType.size() -1;
 		person = person.toLowerCase();
@@ -558,6 +576,10 @@ public class Club implements Comparable<Club>, Comparator<Club> {
 				end = medium -1;
 			}
 		}
+		long second = System.nanoTime();
+		long finalT = second - first;
+		System.out.println("Time for binary search in nanoseconds: "+finalT);
+		
 		
 		return stop;
 	}
@@ -566,6 +588,7 @@ public class Club implements Comparable<Club>, Comparator<Club> {
 	public Person findPersonBinaryDate(String person) {
 		Person stop = null;
 		ArrayList<Person> sortedByDate = sortClientsByDate(); //- 2 +
+		long first = System.nanoTime();
 		int begin = 0;
 		int end = sortedByDate.size() -1;
 		
@@ -580,6 +603,10 @@ public class Club implements Comparable<Club>, Comparator<Club> {
 				end = medium -1;
 			}
 		}
+		long second = System.nanoTime();
+		long finalT = second - first;
+		System.out.println("Time for binary search in nanoseconds: "+finalT);
+		
 		
 		return stop;
 	}
@@ -600,6 +627,111 @@ public class Club implements Comparable<Club>, Comparator<Club> {
 		}
 		
 		return big;
+	}
+
+
+	public Person findPersonSequence(int selection, int i, String thing) {
+		Person p = null;
+		switch (selection) {
+		
+		case 1:
+			p = findPersonId(i);		
+			break;
+
+		case 2:
+			p = findPersonName(thing);		
+			break;
+					
+		case 3:
+			p = findPersonLastName(thing);
+			break;
+			
+		case 4:
+			p = findPersonBinaryDate(thing); 
+			//MISSING
+			//MISSING
+			//MISSING
+			//MISSING
+			break;
+		case 5:
+			p = findPersonType(thing);
+			break;
+		
+		default:
+			break;
+		}
+		return p;
+	}
+
+
+	public Person findPersonId(int i) {
+		Person p = null;
+		boolean stop = false;
+		for (int j = 0; j < clients.size() && !stop; j++) {
+			if (clients.get(j).getId()==i) {
+				p = clients.get(j);
+				stop = true;
+			} 
+			
+		}
+		
+		
+		return p;
+	}
+	
+	public Person findPersonType(String thing) {
+		Person p = null;
+		
+		thing = thing.toUpperCase();
+		for (int j = 0; j < clients.size() && p == null; j++) {
+			if (clients.get(j).getFavTypePet().toUpperCase().equalsIgnoreCase(thing)) {
+				p = clients.get(j);
+				
+			} 
+			
+		}
+		
+		
+		return p;
+	}
+	
+	public Person findPersonName(String thing) {
+		Person p = null;
+		
+		thing = thing.toUpperCase();
+		for (int j = 0; j < clients.size() && p == null; j++) {
+			if (clients.get(j).getName().toUpperCase().equalsIgnoreCase(thing)) {
+				p = clients.get(j);
+				
+			} 
+			
+		}
+		
+		
+		return p;
+	}
+	
+	
+	public Person findPersonLastName(String thing) {
+		Person p = null;
+		
+		thing = thing.toUpperCase();
+		for (int j = 0; j < clients.size() && p == null; j++) {
+			if (clients.get(j).getLastName().toUpperCase().equalsIgnoreCase(thing)) {
+				p = clients.get(j);
+				
+			} 
+			
+		}
+		
+		
+		return p;
+	}
+
+
+	public Pet findPetSequence(Person person, int selection, int i, String date) {
+		
+		return person.findPetSequence(selection, i, date);
 	}
 	
 	
