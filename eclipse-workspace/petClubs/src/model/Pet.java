@@ -30,7 +30,7 @@ public class Pet implements Serializable, Comparable<Pet>, Comparator<Pet> {
 	public final static String FERRET = "Ferret";
 	public final static char MALE = 'M';
 	public final static char FEMALE = 'F';
-	public final static String PETSCSV = "data/Pets.csv";
+	public final static String PETSCSV = "dataTest/Pets.csv";
 	
 	
 	//ATTRIBUTES

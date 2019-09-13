@@ -375,7 +375,7 @@ public class Investor {
 		ArrayList<Club> sorted = getClubs();
 		
 		for (int i = sorted.size(); i > 0; i--) {
-			for (int j = 0; j < i; j++) {
+			for (int j = 1; j < i; j++) {
 				
 				if (sorted.get(j).compare(sorted.get(j), sorted.get(j-1)) < 0) {
 					Club temp = sorted.get(j);
@@ -569,6 +569,10 @@ public class Investor {
 		}
 		
 		GregorianCalendar gc = new GregorianCalendar(Integer.parseInt(dateArray[0]), month, Integer.parseInt(dateArray[2]));
+//		Calendar today = new GregorianCalendar();
+//		int month = today.get(Calendar.MONTH) + 1;
+//		int day = today.get(Calendar.DATE);
+//		int year = today.get(Calendar.YEAR);
 		
 		while (begin <= end && stop == null) {
 			int medium = (begin+end)/2;

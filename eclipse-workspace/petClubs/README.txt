@@ -18,3 +18,5 @@ Go to class Pet.java, and change line number 33 for: public final static String 
 
 
 I strongly suggest you to use this files instead of the default ones if you wanna use the program fast, otherwise you will need to spend some time (more than 2 hours) waiting until the computer loads every single file, and probably another good time while you do stuff within the program.
+
+UPDATE: The program does not take too long loading the 1 million objects, but it does when it sorts or makes search, so I highly recommend you to test the program with the dataTest csv, please take a desition before you launch the program, if you decide to change the csvs, every single csv loaded in the program must be from the same package, otherwise, the program will make a mix between the 1 million objects and the amount of objects for testing.

@@ -28,7 +28,7 @@ import java.util.GregorianCalendar;
 
 public class Person implements Serializable, Comparable<Person>, Comparator<Person> {
 	
-	public final static String PEOPLECSV = "data/People.csv";
+	public final static String PEOPLECSV = "dataTest/People.csv";
 	
 	private int id;
 	private String name;

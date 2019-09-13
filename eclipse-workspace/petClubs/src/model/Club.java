@@ -26,7 +26,7 @@ import java.util.GregorianCalendar;
 
 public class Club implements Comparable<Club>, Comparator<Club> {
 	
-	public final static String CLUBSCSV = "data/Clubs.csv";
+	public final static String CLUBSCSV = "dataTest/Clubs.csv";
 	
 	private String id;
 	private String name;
@@ -130,7 +130,13 @@ public class Club implements Comparable<Club>, Comparator<Club> {
 	
 	
 	public void saveChanges() throws FileNotFoundException, IOException {
-		File file = new File(getId()+getName());
+		File file = null;
+		if (Pet.PETSCSV.contains("Test") && Person.PEOPLECSV.contains("Test") && Club.CLUBSCSV.contains("Test")) {
+			file = new File(getName()+getId());
+		}else {
+			file = new File(getId()+getName());
+		}
+		
 		
 		
 		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
@@ -142,7 +148,14 @@ public class Club implements Comparable<Club>, Comparator<Club> {
 	
 	public boolean loadChanges() throws FileNotFoundException, IOException, ClassNotFoundException {
 		boolean done = false;
-		File file = new File(getId()+getName());
+		
+		
+		File file = null;
+		if (Pet.PETSCSV.contains("Test") && Person.PEOPLECSV.contains("Test") && Club.CLUBSCSV.contains("Test")) {
+			file = new File(getName()+getId());
+		}else {
+			file = new File(getId()+getName());
+		}
 		
 		if (file.exists()) {
 			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
